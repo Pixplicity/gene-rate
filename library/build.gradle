@@ -57,7 +57,7 @@ android {
             minifyEnabled false
         }
         release {
-            // TODO enabling this fucks shit up
+            // TODO enable this
             minifyEnabled false
             consumerProguardFiles 'consumer-proguard-rules.pro'
             //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -83,6 +83,7 @@ check {
 
     checkstyle {
         abortOnError false
+        config "${project.rootDir}/config/checkstyle.xml"
         report new File(project.buildDir, 'reports/checkstyle')
         reportXML new File(project.buildDir, 'reports/checkstyle/checkstyle.xml')
         reportHTML new File(project.buildDir, 'reports/checkstyle/checkstyle.html')
@@ -91,7 +92,7 @@ check {
     pmd {
         skip false
         abortOnError false
-        config "${project.rootDir}/config/pmd-easy.xml"
+        config "${project.rootDir}/config/pmd.xml"
         report new File(project.buildDir, 'reports/pmd')
         reportXML new File(project.buildDir, 'reports/pmd/pmd.xml')
         reportHTML new File(project.buildDir, 'reports/pmd/pmd.html')
@@ -100,14 +101,12 @@ check {
     findbugs {
         skip false
         abortOnError false
-        config easy()
+        config "${project.rootDir}/config/findbugs.xml"
         report new File(project.buildDir, 'reports/findbugs')
         reportXML new File(project.buildDir, 'reports/findbugs/findbugs.xml')
         reportHTML new File(project.buildDir, 'reports/findbugs/findbugs.html')
     }
 }
-
-archivesBaseName = "android-pirate"
 
 install {
     repositories.mavenInstaller {
@@ -131,10 +130,10 @@ bintray {
         name = LIBRARY_NAME
         userOrg = user
         licenses = ['Apache-2.0']
-        vcsUrl = 'https://github.com/pixplicity/pirate.git'
+        vcsUrl = 'https://github.com/Pixplicity/gene-rate'
         version {
             name = VERSION_NAME
-            desc = "Android PiRate Library $VERSION_NAME"
+            desc = "Android Gene-rate Library $VERSION_NAME"
             vcsTag = VERSION_NAME
         }
     }
