@@ -108,12 +108,20 @@ check {
     }
 }
 
+def projectName = 'Gene-rate'
+
 install {
     repositories.mavenInstaller {
         pom.project {
-            group "com.pixplicity.libraries"
-            artifactId LIBRARY_NAME
-            version VERSION_NAME
+            name projectName
+            description 'Generate a better rating for your Android app'
+            url 'https://github.com/Pixplicity/gene-rate'
+            inceptionYear '2017'
+
+            packaging 'aar'
+            group 'com.pixplicity.libraries'
+            artifactId projectName
+            version '1.0'
         }
     }
 }
@@ -127,13 +135,13 @@ bintray {
     // Package info for BinTray
     pkg {
         repo = 'android'
-        name = LIBRARY_NAME
+        name = projectName
         userOrg = 'pixplicity'
         licenses = ['Apache-2.0']
         vcsUrl = 'https://github.com/Pixplicity/gene-rate'
         version {
             name = '1.0'
-            desc = "Android Gene-rate Library 1.0"
+            desc = 'Android Gene-rate Library 1.0'
             released = new Date()
             vcsTag = '1.0'
         }
