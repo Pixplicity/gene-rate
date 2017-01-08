@@ -6,10 +6,17 @@ It is easy to present your users with a dialog begging for a 5-star rating, but 
 
 #### Quick Start
 
+**jCenter coming soon**
+
 Gradle: 
 
 ```groovy
-COMING SOON
+repositories {
+    maven { url 'https://dl.bintray.com/pixplicity/android' }
+}
+dependencies {
+    compile 'com.pixplicity.generate:library:1.0'
+}
 ```
 
 Java:

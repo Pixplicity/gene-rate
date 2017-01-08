@@ -46,7 +46,7 @@ import java.util.concurrent.TimeUnit;
  * the Play Store. If the user does not want to rate your app and indicates a complaint, you have
  * the option to redirect them to a feedback link.
  * <p>
- * To use, call the following on every app start (or when appropriate):<br />
+ * To use, call the following on every app start (or when appropriate):<br>
  * <code>
  * Rate mRate = new Rate.Builder(context)
  * .setTriggerCount(10)
@@ -61,7 +61,6 @@ import java.util.concurrent.TimeUnit;
  * mRate.check();
  * </code>
  * </p>
- * <p>
  */
 public final class Rate {
 
@@ -125,7 +124,7 @@ public final class Rate {
      * request if so. The rating request can be a SnackBar (preferred) or a dialog.
      *
      * @return If the request is shown or not
-     * @see Builder#setSnackBarParent(ViewGroup);
+     * @see Builder#setSnackBarParent(ViewGroup)
      */
     public boolean check() {
         final int count = mPrefs.getInt(KEY_INT_LAUNCH_COUNT, 0);
@@ -469,7 +468,7 @@ public final class Rate {
          *
          * @param uri The Uri to open, or {@code null} to hide the feedback button
          * @return The current {@link Builder}
-         * @see #setFeedbackAction(OnClickListener)
+         * @see #setFeedbackAction(DialogInterface.OnClickListener)
          */
         @NonNull
         public Builder setFeedbackAction(@Nullable final Uri uri) {

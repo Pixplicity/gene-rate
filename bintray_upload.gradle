@@ -17,43 +17,81 @@
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
-def projectName = 'gene-rate'
+group = GROUP
+version = VERSION_NAME
+
+bintray {
+    user = project.hasProperty("bintray.user") ? project.getProperty("bintray.user") : "empty"
+    key = project.hasProperty("bintray.apikey") ? project.getProperty("bintray.apikey") : "empty"
+
+    configurations = ['archives'] //When uploading configuration files
+    pkg {
+        repo = 'android'
+        userOrg = 'pixplicity'
+        name = ARTIFACT_ID
+        desc = POM_DESCRIPTION
+        issueTrackerUrl = POM_ISSUE_URL
+        vcsUrl = POM_URL
+        licenses = ['Apache-2.0']
+        labels = ['android']
+        publicDownloadNumbers = true
+        dryRun = false // Whether to run this as dry-run, without deploying
+        publish = false // If version should be auto published after an bintray_upload
+    }
+}
 
 install {
     repositories.mavenInstaller {
-        pom.project {
-            name projectName
-            description 'Generate a better rating for your Android app'
-            url 'https://github.com/Pixplicity/gene-rate'
-            inceptionYear '2017'
-
-            packaging 'aar'
-            group 'com.pixplicity.generate'
-            groupId 'com.pixplicity.generate'
-            artifactId projectName
-            version "1.0.0"
+        pom {
+            project {
+                packaging 'aar'
+                name project.name
+                url POM_URL
+                description POM_DESCRIPTION
+                licenses {
+                    license {
+                        name POM_LICENCE_NAME
+                        url POM_LICENCE_URL
+                        distribution POM_LICENCE_DIST
+                    }
+                }
+                developers {
+                    developer {
+                        id POM_DEVELOPER_ID_0
+                        name POM_DEVELOPER_NAME_0
+                        email POM_DEVELOPER_EMAIL_0
+                    }
+                }
+                scm {
+                    connection POM_SCM_CONNECTION
+                    developerConnection POM_SCM_DEV_CONNECTION
+                    url POM_URL
+                }
+            }
         }
     }
 }
 
-// Thanks to https://guides.codepath.com/android/Building-your-own-Android-library
-bintray {
-    user = project.hasProperty('bintray.user') ? project.property('bintray.user') : System.getenv('BINTRAY_USER')
-    key = project.hasProperty('bintray.apikey') ? project.property('bintray.apikey') : System.getenv('BINTRAY_API_KEY')
-    // jFrog plugin must be declared for this line to work
-    configurations = ['archives']
-    // Package info for BinTray
-    pkg {
-        repo = 'android'
-        name = projectName
-        userOrg = 'pixplicity'
-        licenses = ['Apache-2.0']
-        vcsUrl = 'https://github.com/Pixplicity/gene-rate'
-        version {
-            name = "1.0"
-            desc = 'Android Gene-rate Library 1.0'
-            released = new Date()
-            vcsTag = "1.0"
-        }
-    }
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+task findConventions << {
+    println project.getConvention()
 }
