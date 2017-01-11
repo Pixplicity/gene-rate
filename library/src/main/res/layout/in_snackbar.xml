@@ -83,7 +83,8 @@
         <Button
             android:id="@+id/bt_positive"
             style="@style/Base.Widget.AppCompat.Button.ButtonBar.AlertDialog"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:text="@string/button_yes"/>

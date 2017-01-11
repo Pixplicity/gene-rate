@@ -26,6 +26,7 @@ import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
@@ -217,6 +218,7 @@ public final class Rate {
         checkBox.setText(mTextNever);
         checkBox.setChecked(DEFAULT_CHECKED);
         final Button btFeedback = (Button) snackView.findViewById(R.id.bt_negative);
+        btFeedback.setPaintFlags(btFeedback.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         final Button btRate = (Button) snackView.findViewById(R.id.bt_positive);
         snackView.findViewById(R.id.tv_swipe).setVisibility(
                 mSnackBarSwipeToDismiss ? View.VISIBLE : View.GONE);
@@ -273,6 +275,7 @@ public final class Rate {
         checkBox.setText(mTextNever);
         checkBox.setChecked(DEFAULT_CHECKED);
         final Button btFeedback = (Button) layout.findViewById(R.id.bt_negative);
+        btFeedback.setPaintFlags(btFeedback.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
         // Build dialog with positive and cancel buttons
         final AlertDialog.Builder builder = new AlertDialog.Builder(mContext)

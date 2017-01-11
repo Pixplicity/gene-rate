@@ -15,7 +15,7 @@
 - Larger **SnackBar** with functionality like the dialog.
 - Added 'swipe to dismiss' to SnackBar (note: requires the SnackBar parent to be a `CoordinatorLayout`)
 - Replaced `DialogInterface.OnClickListener` with `onFeedbackListener` as type for feedback callbacks.
-
+- Underlined feedback buttons to give the impression of a link
 
 ### 1.0 Initial release (Jan 2017)
 
