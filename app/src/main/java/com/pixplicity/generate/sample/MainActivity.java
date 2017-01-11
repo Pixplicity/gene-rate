@@ -26,6 +26,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.pixplicity.generate.OnFeedbackListener;
 import com.pixplicity.generate.Rate;
 
 public class MainActivity extends AppCompatActivity {
@@ -69,7 +70,12 @@ public class MainActivity extends AppCompatActivity {
         mRateBar = new Rate.Builder(this)
                 .setMessage(R.string.please_rate_short)
                 .setMinimumInstallTime(0)
-                .setFeedbackAction(Uri.parse("mailto:example@example.com"))
+                .setFeedbackAction(new OnFeedbackListener() {
+                    @Override
+                    public void onFeedbackTapped() {
+                        Toast.makeText(MainActivity.this, "Meh", Toast.LENGTH_SHORT).show();
+                    }
+                })
                 .setSnackBarParent(root)
                 .build();
 

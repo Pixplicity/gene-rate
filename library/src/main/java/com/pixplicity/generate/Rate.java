@@ -84,7 +84,7 @@ public final class Rate {
     private int mTriggerCount = DEFAULT_COUNT;
     private long mMinInstallTime = DEFAULT_INSTALL_TIME;
     private ViewGroup mParentView;
-    private OnClickListener mFeedbackAction;
+    private OnFeedbackListener mFeedbackAction;
     private boolean mSnackBarSwipeToDismiss = true;
 
     private Rate(@NonNull Context context) {
@@ -221,7 +221,7 @@ public final class Rate {
                         saveAsked();
                     }
                     snackbar.dismiss();
-                    mFeedbackAction.onClick(null, DialogInterface.BUTTON_NEGATIVE);
+                    mFeedbackAction.onFeedbackTapped();
                 }
             });
         }
@@ -307,7 +307,7 @@ public final class Rate {
                         saveAsked();
                     }
                     dialog.dismiss();
-                    mFeedbackAction.onClick(dialog, DialogInterface.BUTTON_NEGATIVE);
+                    mFeedbackAction.onFeedbackTapped();
                 }
             });
         }
@@ -523,17 +523,17 @@ public final class Rate {
          *
          * @param uri The Uri to open, or {@code null} to hide the feedback button
          * @return The current {@link Builder}
-         * @see #setFeedbackAction(DialogInterface.OnClickListener)
+         * @see #setFeedbackAction(OnFeedbackListener)
          */
         @NonNull
         public Builder setFeedbackAction(@Nullable final Uri uri) {
             if (uri == null) {
                 mRate.mFeedbackAction = null;
             } else {
-                mRate.mFeedbackAction = new DialogInterface.OnClickListener() {
+                mRate.mFeedbackAction = new OnFeedbackListener() {
 
                     @Override
-                    public void onClick(DialogInterface anInterface, int i) {
+                    public void onFeedbackTapped() {
                         Intent intent = new Intent(Intent.ACTION_VIEW);
                         intent.setData(uri);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -555,7 +555,7 @@ public final class Rate {
          * @see #setFeedbackAction(Uri)
          */
         @NonNull
-        public Builder setFeedbackAction(@Nullable DialogInterface.OnClickListener action) {
+        public Builder setFeedbackAction(@Nullable OnFeedbackListener action) {
             mRate.mFeedbackAction = action;
             return this;
         }
