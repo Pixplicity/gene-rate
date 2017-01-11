@@ -94,11 +94,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mRateDialog.launched();
+        mRateDialog.count();
     }
 
     private void onActionPerformed() {
-        if (!mRateDialog.check()) {
+        if (!mRateDialog.showRequest()) {
             Toast.makeText(this, "Launch the app a few more times", Toast.LENGTH_SHORT).show();
         }
     }

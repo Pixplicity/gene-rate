@@ -58,11 +58,11 @@ import java.util.concurrent.TimeUnit;
  * .setMessage(R.string.my_message_text)
  * .setSnackBarParent(view)
  * .build();
- * mRate.launched();
+ * mRate.count();
  * </code>
  * When it is a good time to show a rating request, call:
  * <code>
- * mRate.check();
+ * mRate.showRequest();
  * </code>
  * </p>
  */
@@ -99,18 +99,28 @@ public final class Rate {
     }
 
     /**
+     * Use {@link #count()} instead
+     *
+     * @return
+     */
+    @Deprecated
+    public Rate launched() {
+        return count();
+    }
+
+    /**
      * Call this method whenever your app is launched to increase the launch counter. Or whenever
      * the user performs an action that indicates immersion.
      *
      * @return the {@link Rate} instance
      */
     @NonNull
-    public Rate launched() {
+    public Rate count() {
         Editor editor = mPrefs.edit();
         // Get current launch count
         int count = mPrefs.getInt(KEY_INT_LAUNCH_COUNT, 0);
         // Increment, but only when we're not on a launch point. Otherwise we could miss
-        // it when .launched and .check calls are not called exactly alternated
+        // it when .count and .showRequest calls are not called exactly alternated
         if (count != mTriggerCount
                 && (count - mTriggerCount) % DEFAULT_REPEAT_COUNT != 0) {
             count++;
@@ -125,13 +135,23 @@ public final class Rate {
     }
 
     /**
+     * Use {@link #showRequest()} instead
+     *
+     * @return
+     */
+    @Deprecated
+    public boolean check() {
+        return showRequest();
+    }
+
+    /**
      * Checks if the app has been launched often enough to ask for a rating, and shows the rating
      * request if so. The rating request can be a SnackBar (preferred) or a dialog.
      *
      * @return If the request is shown or not
      * @see Builder#setSnackBarParent(ViewGroup)
      */
-    public boolean check() {
+    public boolean showRequest() {
         final int count = mPrefs.getInt(KEY_INT_LAUNCH_COUNT, 0);
         final boolean asked = mPrefs.getBoolean(KEY_BOOL_ASKED, false);
         final long firstLaunch = mPrefs.getLong(KEY_LONG_FIRST_LAUNCH, 0);
@@ -363,10 +383,10 @@ public final class Rate {
         }
 
         /**
-         * Set number of times {@link #launched()} should be called before triggering the rating
+         * Set number of times {@link #count()} should be called before triggering the rating
          * request
          *
-         * @param count Number of times (inclusive) to call {@link #launched()} before rating
+         * @param count Number of times (inclusive) to call {@link #count()} before rating
          *              request should show. Defaults to {@link #DEFAULT_COUNT}
          * @return The current {@link Builder}
          */
