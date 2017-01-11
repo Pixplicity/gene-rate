@@ -23,4 +23,5 @@
     <string name="button_no">No thanks</string>
     <string name="button_feedback">Give feedback…</string>
     <string name="button_dont_ask">Don’t ask again</string>
+    <string name="swipe_to_dismiss">Swipe to dismiss</string>
 </resources>

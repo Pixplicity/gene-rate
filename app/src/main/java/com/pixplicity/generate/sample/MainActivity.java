@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
         mRateBar = new Rate.Builder(this)
                 .setMessage(R.string.please_rate_short)
                 .setMinimumInstallTime(0)
+                .setFeedbackAction(Uri.parse("mailto:example@example.com"))
                 .setSnackBarParent(root)
                 .build();
 

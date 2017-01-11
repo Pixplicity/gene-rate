@@ -38,6 +38,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.TextView;
 
 import java.util.concurrent.TimeUnit;
 
@@ -173,15 +176,62 @@ public final class Rate {
 
     private void showRatingSnackbar() {
         // Wie is hier nou de snackbar?
-        Snackbar.make(mParentView, mMessage, Snackbar.LENGTH_LONG)
-                .setAction(R.string.button_yes, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        openPlayStore();
+        final Snackbar snackbar = Snackbar.make(mParentView, mMessage, Snackbar.LENGTH_INDEFINITE);
+        Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) snackbar.getView();
+
+        // Hide default text
+        TextView textView = (TextView) layout.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setVisibility(View.INVISIBLE);
+
+        // Inflate our custom view
+        final LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        @SuppressLint("InflateParams")
+        View snackView = inflater.inflate(R.layout.in_snackbar, null);
+        // Configure the view
+        TextView tvMessage = (TextView) snackView.findViewById(R.id.text);
+        tvMessage.setText(mMessage);
+        final CheckBox checkBox = (CheckBox) snackView.findViewById(R.id.cb_never);
+        checkBox.setText(mTextNever);
+        checkBox.setChecked(DEFAULT_CHECKED);
+        final Button btFeedback = (Button) snackView.findViewById(R.id.bt_negative);
+        final Button btRate = (Button) snackView.findViewById(R.id.bt_positive);
+
+        // Rate listener
+        btRate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                snackbar.dismiss();
+                openPlayStore();
+                saveAsked();
+            }
+        });
+        // Feedback listener
+        if (mFeedbackAction != null) {
+            btFeedback.setText(mTextNegative);
+            btFeedback.setVisibility(View.VISIBLE);
+            btFeedback.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (checkBox.isChecked()) {
                         saveAsked();
                     }
-                })
-                .show();
+                    snackbar.dismiss();
+                    mFeedbackAction.onClick(null, DialogInterface.BUTTON_NEGATIVE);
+                }
+            });
+        }
+        // Checkbox listener
+        checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton button, boolean checked) {
+                mPrefs.edit().putBoolean(KEY_BOOL_ASKED, checked).apply();
+            }
+        });
+
+        // Add the view to the Snackbar's layout
+        layout.addView(snackView, 0);
+        // Show the Snackbar
+        snackbar.show();
     }
 
     private void showRatingDialog() {
