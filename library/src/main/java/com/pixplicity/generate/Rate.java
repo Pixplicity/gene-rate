@@ -32,6 +32,7 @@ import android.os.Build.VERSION_CODES;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -84,6 +85,7 @@ public final class Rate {
     private long mMinInstallTime = DEFAULT_INSTALL_TIME;
     private ViewGroup mParentView;
     private OnClickListener mFeedbackAction;
+    private boolean mSnackBarSwipeToDismiss = true;
 
     private Rate(@NonNull Context context) {
         mContext = context;
@@ -176,7 +178,8 @@ public final class Rate {
 
     private void showRatingSnackbar() {
         // Wie is hier nou de snackbar?
-        final Snackbar snackbar = Snackbar.make(mParentView, mMessage, Snackbar.LENGTH_INDEFINITE);
+        final Snackbar snackbar = Snackbar.make(mParentView, mMessage,
+                mSnackBarSwipeToDismiss ? Snackbar.LENGTH_INDEFINITE : Snackbar.LENGTH_LONG);
         Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) snackbar.getView();
 
         // Hide default text
@@ -195,6 +198,8 @@ public final class Rate {
         checkBox.setChecked(DEFAULT_CHECKED);
         final Button btFeedback = (Button) snackView.findViewById(R.id.bt_negative);
         final Button btRate = (Button) snackView.findViewById(R.id.bt_positive);
+        snackView.findViewById(R.id.tv_swipe).setVisibility(
+                mSnackBarSwipeToDismiss ? View.VISIBLE : View.GONE);
 
         // Rate listener
         btRate.setOnClickListener(new View.OnClickListener() {
@@ -566,6 +571,24 @@ public final class Rate {
         @NonNull
         public Builder setSnackBarParent(@Nullable ViewGroup parent) {
             mRate.mParentView = parent;
+            return this;
+        }
+
+        /**
+         * Shows or hides the 'swipe to dismiss' notion in the Snackbar. When disabled, the
+         * Snackbar will automatically hide after a view seconds. When enabled, the Snackbar will
+         * show indefinitively until dismissed by the user. <strong>Note that the
+         * Snackbar can only be swiped when one of the parent views is a
+         * {@link CoordinatorLayout}!</strong> Also, <strong>toggling this does not change
+         * if the Snackbar can actually be swiped to dismiss!</strong>
+         *
+         * @param visible Show/hide the 'swipe to dismiss' text, and disable/enable auto-hide.
+         *                Default is {code true}.
+         * @return The current {@link Builder}
+         */
+        @NonNull
+        public Builder setSwipeToDismissVisible(boolean visible) {
+            mRate.mSnackBarSwipeToDismiss = visible;
             return this;
         }
 

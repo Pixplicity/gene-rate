@@ -14,73 +14,77 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-
-<LinearLayout
+<android.support.design.widget.CoordinatorLayout
     android:id="@+id/activity_main"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.pixplicity.generate.sample.MainActivity">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:gravity="center"
-        android:text="When this app has been launched a few times, and after you perform an action that indicates engagement, I will ask for feedback or a rating."/>
-
-    <Button
-        android:id="@+id/bt_action"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Perform action"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:layout_marginTop="10dp"
-        android:gravity="center"
-        android:text="Force showing the rating request:"/>
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        tools:context="com.pixplicity.generate.sample.MainActivity">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:gravity="center"
+            android:text="When this app has been launched a few times, and after you perform an action that indicates engagement, I will ask for feedback or a rating."/>
 
         <Button
-            android:id="@+id/bt_test_dialog"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:id="@+id/bt_action"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Dialog"/>
+            android:text="Perform action"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text="Force showing the rating request:"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/bt_test_dialog"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Dialog"/>
+
+            <Button
+                android:id="@+id/bt_test_bar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="SnackBar"/>
+        </LinearLayout>
 
         <Button
-            android:id="@+id/bt_test_bar"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:id="@+id/bt_info"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SnackBar"/>
+            android:layout_gravity="end"
+            android:text="By Pixplicity"
+            android:textAllCaps="false"
+            android:textStyle="normal"/>
     </LinearLayout>
-
-    <Button
-        android:id="@+id/bt_info"
-        style="@style/Base.Widget.AppCompat.Button.Borderless"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:text="By Pixplicity"
-        android:textAllCaps="false"
-        android:textStyle="normal"/>
-</LinearLayout>
+</android.support.design.widget.CoordinatorLayout>
