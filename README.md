@@ -9,7 +9,7 @@ It is easy to present your users with a dialog begging for a 5-star rating, but 
 Gradle: 
 
 ```groovy
-compile 'com.pixplicity.generate:library:1.0'
+compile 'com.pixplicity.generate:library:1.+'
 ```
 
 Java:
