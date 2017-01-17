@@ -16,4 +16,8 @@
 
 <resources>
     <string name="app_name">Gene-rate</string>
+    <string name="pix_link" translatable="false">https://pixplicity.com/?utm_source=android-gene-rate-app&amp;utm_medium=app</string>
+    <string name="made_by">Made with love by <a>Pixplicity</a></string>
+    <string name="github_link">https://github.com/Pixplicity/gene-rate/</string>
+    <string name="github">Available on <a>GitHub</a></string>
 </resources>

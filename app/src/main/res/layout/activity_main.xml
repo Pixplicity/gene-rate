@@ -77,14 +77,27 @@
                 android:text="SnackBar"/>
         </LinearLayout>
 
-        <Button
-            android:id="@+id/bt_info"
-            style="@style/Base.Widget.AppCompat.Button.Borderless"
+        <TextView
+            android:id="@+id/tv_made_by"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:text="By Pixplicity"
-            android:textAllCaps="false"
-            android:textStyle="normal"/>
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:autoLink="all"
+            android:background="?android:selectableItemBackground"
+            android:padding="8dp"
+            android:text="@string/made_by"/>
+
+        <TextView
+            android:id="@+id/tv_github"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="8dp"
+            android:autoLink="all"
+            android:background="?android:selectableItemBackground"
+            android:clickable="true"
+            android:padding="8dp"
+            android:text="@string/github"/>
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

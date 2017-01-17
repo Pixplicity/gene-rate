@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pixplicity.generate.OnFeedbackListener;
@@ -79,12 +80,23 @@ public class MainActivity extends AppCompatActivity {
                 .setSnackBarParent(root)
                 .build();
 
-        Button btInfo = (Button) findViewById(R.id.bt_info);
-        btInfo.setOnClickListener(new OnClickListener() {
+        TextView tvMadeBy = (TextView) findViewById(R.id.tv_made_by);
+        tvMadeBy.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse("https://pixplicity.com/?utm_source=android-gene-rate-app&utm_medium=app"));
+                intent.setData(Uri.parse(getString(R.string.pix_link)));
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });
+
+        TextView tvGitHub = (TextView) findViewById(R.id.tv_github);
+        tvGitHub.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(getString(R.string.github_link)));
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
