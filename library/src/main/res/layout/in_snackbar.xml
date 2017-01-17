@@ -82,11 +82,11 @@
 
         <Button
             android:id="@+id/bt_positive"
-            style="@style/Base.Widget.AppCompat.Button.ButtonBar.AlertDialog"
+            style="@style/Base.Widget.AppCompat.Button.Colored"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|bottom"
             android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
             android:text="@string/button_yes"/>
     </LinearLayout>
 </LinearLayout>
