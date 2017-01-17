@@ -33,7 +33,6 @@ import android.os.Build.VERSION_CODES;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -602,7 +601,7 @@ public final class Rate {
          * Snackbar will automatically hide after a view seconds. When enabled, the Snackbar will
          * show indefinitively until dismissed by the user. <strong>Note that the
          * Snackbar can only be swiped when one of the parent views is a
-         * {@link CoordinatorLayout}!</strong> Also, <strong>toggling this does not change
+         * {@code CoordinatorLayout}!</strong> Also, <strong>toggling this does not change
          * if the Snackbar can actually be swiped to dismiss!</strong>
          *
          * @param visible Show/hide the 'swipe to dismiss' text, and disable/enable auto-hide.
