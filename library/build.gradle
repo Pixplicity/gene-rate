@@ -21,8 +21,6 @@ repositories {
     maven { url 'https://maven.fabric.io/public' }
 }
 
-def gitSha = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
-
 android {
 
     compileSdkVersion 25
@@ -45,7 +43,6 @@ android {
         targetSdkVersion 25
         versionCode Integer.parseInt(VERSION_CODE)
         versionName VERSION_NAME
-        buildConfigField "String", "VERSION_STR", "\"${VERSION_NAME}-${VERSION_CODE} (${gitSha})\""
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -55,10 +52,8 @@ android {
             minifyEnabled false
         }
         release {
-            // TODO enable this
             minifyEnabled false
             consumerProguardFiles 'consumer-proguard-rules.pro'
-            //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 
