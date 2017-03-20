@@ -35,8 +35,12 @@ bintray {
         licenses = ['Apache-2.0']
         labels = ['android']
         publicDownloadNumbers = true
-        dryRun = false // Whether to run this as dry-run, without deploying
-        publish = false // If version should be auto published after an bintray_upload
+        dryRun = false
+        publish = false
+        version {
+            name = VERSION_NAME
+            released = new Date()
+        }
     }
 }
 

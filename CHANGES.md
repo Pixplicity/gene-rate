@@ -1,5 +1,8 @@
-
 # Changes
+
+### 1.1.2 (Mar 15, 2017)
+
+- Message in SnackBar could appear as black text on dark background.
 
 ### 1.1.0 (Jan 17, 2017)
 

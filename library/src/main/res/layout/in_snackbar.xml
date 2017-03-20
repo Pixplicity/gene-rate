@@ -39,7 +39,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="12dp"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium.Inverse"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault"
+        android:textColor="?android:attr/textColorSecondaryInverse"
         tools:text="@string/please_rate_short"/>
 
     <LinearLayout
