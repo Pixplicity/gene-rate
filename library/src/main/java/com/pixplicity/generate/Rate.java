@@ -613,6 +613,16 @@ public final class Rate {
             mRate.mSnackBarSwipeToDismiss = visible;
             return this;
         }
+        
+        /**
+         * Resets all data saved by Gene-rate. This is not advised in production builds 
+         * as behavior against user preferences can occur.
+         */
+        @NonNull
+        public Builder reset(){
+            mRate.mPrefs.edit().clear().commit();
+            return this;
+        }
 
         @NonNull
         public Rate build() {
