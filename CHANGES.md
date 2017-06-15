@@ -1,5 +1,10 @@
 # Changes
 
+### 1.1.3 (Jun 15, 2017)
+
+- SDK 26
+- Added `reset` method to clear settings during testing.
+
 ### 1.1.2 (Mar 15, 2017)
 
 - Message in SnackBar could appear as black text on dark background.

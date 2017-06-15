@@ -101,7 +101,7 @@ public final class Rate {
     /**
      * Use {@link #count()} instead
      *
-     * @return
+     * @return the {@link Rate} instance
      */
     @Deprecated
     public Rate launched() {
@@ -137,7 +137,7 @@ public final class Rate {
     /**
      * Use {@link #showRequest()} instead
      *
-     * @return
+     * @return See {@link #showRequest()}
      */
     @Deprecated
     public boolean check() {
@@ -185,6 +185,18 @@ public final class Rate {
     @NonNull
     public Rate test() {
         showRatingRequest();
+        return this;
+    }
+
+    /**
+     * Resets all data saved by Gene-rate. This is not advised in production builds
+     * as behavior against user preferences can occur.
+     *
+     * @return the {@link Rate} instance
+     */
+    @NonNull
+    public Rate reset() {
+        mPrefs.edit().clear().apply();
         return this;
     }
 
@@ -268,8 +280,7 @@ public final class Rate {
             inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
 
-        @SuppressLint("InflateParams")
-        final ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.in_dialog, null);
+        @SuppressLint("InflateParams") final ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.in_dialog, null);
         final CheckBox checkBox = (CheckBox) layout.findViewById(R.id.cb_never);
         checkBox.setText(mTextNever);
         checkBox.setChecked(DEFAULT_CHECKED);
@@ -614,6 +625,11 @@ public final class Rate {
             return this;
         }
 
+        /**
+         * Build the {@link Rate} instance
+         *
+         * @return a new Rate instance as configured by the current {@link Builder}
+         */
         @NonNull
         public Rate build() {
             return mRate;
