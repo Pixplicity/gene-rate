@@ -17,14 +17,12 @@
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
-group = GROUP
-version = VERSION_NAME
-
 bintray {
     user = project.hasProperty("bintray.user") ? project.getProperty("bintray.user") : "empty"
     key = project.hasProperty("bintray.apikey") ? project.getProperty("bintray.apikey") : "empty"
 
     configurations = ['archives'] //When uploading configuration files
+
     pkg {
         repo = 'android'
         userOrg = 'pixplicity'
@@ -38,7 +36,7 @@ bintray {
         dryRun = false
         publish = false
         version {
-            name = VERSION_NAME
+            name = versions.versionName
             released = new Date()
         }
     }

@@ -23,8 +23,8 @@ repositories {
 
 android {
 
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion versions.targetSdk
+    buildToolsVersion versions.buildTools
 
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES.txt'
@@ -39,10 +39,10 @@ android {
 
     defaultConfig {
 
-        minSdkVersion 14
-        targetSdkVersion 25
-        versionCode Integer.parseInt(VERSION_CODE)
-        versionName VERSION_NAME
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.targetSdk
+        versionCode versions.versionCode
+        versionName versions.versionName
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -107,9 +107,9 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.2.0'
+    compile "com.android.support:appcompat-v7:$versions.supportLib"
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:design:25.2.0'
+    compile "com.android.support:design:$versions.supportLib"
 }
 
 apply from: new File('../bintray_upload.gradle')
