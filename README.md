@@ -1,3 +1,5 @@
+ [![Download](https://api.bintray.com/packages/pixplicity/android/gene-rate/images/download.svg)](https://bintray.com/pixplicity/android/gene-rate/_latestVersion)
+
 # Gene-rate
 
 **Generate a better rating for your Android app!**
