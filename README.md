@@ -111,7 +111,7 @@ Here is a final, complete example of what Gene-rate can do:
 ```java
 Rate rate = new Rate.Builder(context)
 	.setTriggerCount(10)								// Optional, defaults to 6
-	.setMinimumInstallTime(TimeUnit.DAYS.toMillis(7))	// Optional, defaulst to 7 days
+	.setMinimumInstallTime(TimeUnit.DAYS.toMillis(7))	// Optional, defaults to 7 days
     .setFeedbackAction(new OnFeedbackListener() {		// Optional
         @Override
         public void onFeedbackTapped() {
