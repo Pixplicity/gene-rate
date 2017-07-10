@@ -97,7 +97,7 @@ instead of the dialog simple call the following on the builder:
 	.setSnackBarParent(myRootView)
 ```
 
-Make sure that `myRootView` or one of its parents is a `CooordinatorLayout` though! Otherwise it
+Make sure that `myRootView` or one of its parents is a `CoordinatorLayout` though! Otherwise it
 can't be swiped away. If this is the case you can make a workaround by calling
 `.setSwipeToDismiss(false)`, which both hides the 'Swipe to dismiss' note and changes the duration
 of display from `SnackBar.LENGTH_INDEFINITE` to `SnackBar.LENGTH_LONG`. This way the SnackBar hides
