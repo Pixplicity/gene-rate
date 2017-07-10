@@ -38,7 +38,7 @@ bintray {
         dryRun = false
         publish = false
         version {
-            name = version
+            name = versions.versionName
             released = new Date()
             desc = "Gene-rate library stable release $version"
         }
@@ -58,7 +58,7 @@ install {
                 packaging 'aar'
                 groupId GROUP
                 artifactId ARTIFACT_ID
-                version version
+                version versions.versionName
 
                 licenses {
                     license {
