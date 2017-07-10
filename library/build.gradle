@@ -34,7 +34,6 @@ android {
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/.readme'
         exclude '.readme'
-        return void
     }
 
     defaultConfig {
@@ -71,36 +70,6 @@ android {
     }
 }
 
-check {
-    abortOnError false
-
-    checkstyle {
-        abortOnError false
-        config "${project.rootDir}/config/checkstyle.xml"
-        report new File(project.buildDir, 'reports/checkstyle')
-        reportXML new File(project.buildDir, 'reports/checkstyle/checkstyle.xml')
-        reportHTML new File(project.buildDir, 'reports/checkstyle/checkstyle.html')
-    }
-
-    pmd {
-        skip false
-        abortOnError false
-        config "${project.rootDir}/config/pmd.xml"
-        report new File(project.buildDir, 'reports/pmd')
-        reportXML new File(project.buildDir, 'reports/pmd/pmd.xml')
-        reportHTML new File(project.buildDir, 'reports/pmd/pmd.html')
-    }
-
-    findbugs {
-        skip false
-        abortOnError false
-        config "${project.rootDir}/config/findbugs.xml"
-        report new File(project.buildDir, 'reports/findbugs')
-        reportXML new File(project.buildDir, 'reports/findbugs/findbugs.xml')
-        reportHTML new File(project.buildDir, 'reports/findbugs/findbugs.html')
-    }
-}
-
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -112,4 +81,5 @@ dependencies {
     compile "com.android.support:design:$versions.supportLib"
 }
 
+apply from: file('../code_checks.gradle')
 apply from: new File('../bintray_upload.gradle')

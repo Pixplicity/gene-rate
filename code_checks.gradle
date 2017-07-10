@@ -1,0 +1,45 @@
+/*
+ * Copyright (c) 2017    Mathijs Lagerberg, Pixplicity BV
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+check {
+    abortOnError false
+
+    checkstyle {
+        abortOnError false
+        config "${project.rootDir}/config/checkstyle.xml"
+        report new File(project.buildDir, 'reports/checkstyle')
+        reportXML new File(project.buildDir, 'reports/checkstyle/checkstyle.xml')
+        reportHTML new File(project.buildDir, 'reports/checkstyle/checkstyle.html')
+    }
+
+    pmd {
+        skip false
+        abortOnError false
+        config "${project.rootDir}/config/pmd.xml"
+        report new File(project.buildDir, 'reports/pmd')
+        reportXML new File(project.buildDir, 'reports/pmd/pmd.xml')
+        reportHTML new File(project.buildDir, 'reports/pmd/pmd.html')
+    }
+
+    findbugs {
+        skip false
+        abortOnError false
+        config "${project.rootDir}/config/findbugs.xml"
+        report new File(project.buildDir, 'reports/findbugs')
+        reportXML new File(project.buildDir, 'reports/findbugs/findbugs.xml')
+        reportHTML new File(project.buildDir, 'reports/findbugs/findbugs.html')
+    }
+}
