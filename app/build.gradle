@@ -45,11 +45,11 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile "com.android.support:appcompat-v7:$versions.supportLib"
-    testCompile 'junit:junit:4.12'
-    compile project(':library')
+    implementation "com.android.support:appcompat-v7:$versions.supportLib"
+    testImplementation 'junit:junit:4.12'
+    implementation project(':library')
 }
