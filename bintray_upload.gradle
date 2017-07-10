@@ -17,7 +17,7 @@
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
-version = versions.versionName
+def versionName = versions.versionName
 
 bintray {
     user = project.hasProperty("bintray.user") ? project.getProperty("bintray.user") : "empty"
@@ -31,7 +31,7 @@ bintray {
         name = ARTIFACT_ID
         desc = POM_DESCRIPTION
         issueTrackerUrl = POM_ISSUE_URL
-        vcsUrl = POM_URL
+        vcsUrl = POM_SCM_URL
         licenses = ['Apache-2.0']
         labels = ['android']
         publicDownloadNumbers = true
@@ -40,7 +40,8 @@ bintray {
         version {
             name = versions.versionName
             released = new Date()
-            desc = "Gene-rate library stable release $version"
+            desc = "Gene-rate library stable release $versionName"
+            vcsTag = "v$versionName"
         }
     }
 }
@@ -50,15 +51,15 @@ install {
         pom {
             project {
 
-                name project.name
-                url POM_URL
+                name ARTIFACT_NAME
                 description POM_DESCRIPTION
+                url POM_URL
                 inceptionYear '2017'
 
                 packaging 'aar'
                 groupId GROUP
                 artifactId ARTIFACT_ID
-                version versions.versionName
+                version versionName
 
                 licenses {
                     license {
@@ -77,7 +78,7 @@ install {
                 scm {
                     connection POM_SCM_CONNECTION
                     developerConnection POM_SCM_DEV_CONNECTION
-                    url POM_URL
+                    url POM_SCM_URL
                 }
             }
         }
