@@ -1,8 +1,11 @@
 # Changes
 
-### 1.1.5 (Jul 11, 2017)
+### 1.1.6 (Jul 12, 2017)
+
+Skipped some versions due to publication issues.
 
 - Fixed: checkbox and text would appear as dark text on dark background when using a dark app theme.
+
 
 ### 1.1.3 (Jun 15, 2017)
 
