@@ -1,5 +1,9 @@
 # Changes
 
+### 1.1.5 (Jul 11, 2017)
+
+- Fixed: checkbox and text would appear as dark text on dark background when using a dark app theme.
+
 ### 1.1.3 (Jun 15, 2017)
 
 - SDK 26
