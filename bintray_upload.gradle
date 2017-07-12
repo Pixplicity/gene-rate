@@ -17,13 +17,16 @@
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
+// Note: these lines are important, even though they're not used in this file!
+// Bintray plugin looks for it.
+group = GROUP
 version = versions.versionName
 
 bintray {
     user = project.hasProperty("bintray.user") ? project.getProperty("bintray.user") : "empty"
     key = project.hasProperty("bintray.apikey") ? project.getProperty("bintray.apikey") : "empty"
 
-    configurations = ['archives'] // When uploading configuration files
+    configurations = ['archives']
 
     pkg {
         repo = 'android'
@@ -31,7 +34,7 @@ bintray {
         name = ARTIFACT_ID
         desc = POM_DESCRIPTION
         issueTrackerUrl = POM_ISSUE_URL
-        vcsUrl = POM_URL
+        vcsUrl = POM_SCM_URL
         licenses = ['Apache-2.0']
         labels = ['android']
         publicDownloadNumbers = true
@@ -40,45 +43,44 @@ bintray {
         version {
             name = versions.versionName
             released = new Date()
-            desc = "Gene-rate library stable release $version"
+            desc = "Gene-rate library stable release ${versions.versionName}"
+            vcsTag = "v${versions.versionName}"
         }
     }
 }
 
 install {
     repositories.mavenInstaller {
-        pom {
-            project {
+        pom.project {
 
-                name project.name
-                url POM_URL
-                description POM_DESCRIPTION
-                inceptionYear '2017'
+            name ARTIFACT_NAME
+            description POM_DESCRIPTION
+            url POM_URL
+            inceptionYear '2017'
 
-                packaging 'aar'
-                groupId GROUP
-                artifactId ARTIFACT_ID
-                version versions.versionName
+            packaging 'aar'
+            groupId GROUP
+            artifactId 'library'
+            version versions.versionName
 
-                licenses {
-                    license {
-                        name POM_LICENCE_NAME
-                        url POM_LICENCE_URL
-                        distribution POM_LICENCE_DIST
-                    }
+            licenses {
+                license {
+                    name POM_LICENCE_NAME
+                    url POM_LICENCE_URL
+                    distribution POM_LICENCE_DIST
                 }
-                developers {
-                    developer {
-                        id POM_DEVELOPER_ID_0
-                        name POM_DEVELOPER_NAME_0
-                        email POM_DEVELOPER_EMAIL_0
-                    }
+            }
+            developers {
+                developer {
+                    id POM_DEVELOPER_ID_0
+                    name POM_DEVELOPER_NAME_0
+                    email POM_DEVELOPER_EMAIL_0
                 }
-                scm {
-                    connection POM_SCM_CONNECTION
-                    developerConnection POM_SCM_DEV_CONNECTION
-                    url POM_URL
-                }
+            }
+            scm {
+                connection POM_SCM_CONNECTION
+                developerConnection POM_SCM_DEV_CONNECTION
+                url POM_SCM_URL
             }
         }
     }
