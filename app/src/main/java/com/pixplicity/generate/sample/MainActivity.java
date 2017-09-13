@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
 
     @SuppressLint("ShowToast")
     private synchronized void showRemainingCount() {
-        int count = mRateDialog.getRemainingCount();
+        int count = (int) mRateDialog.getRemainingCount();
         String message = getResources().getQuantityString(R.plurals.toast_x_more_times, count, count);
         if (mToast == null) {
             mToast = Toast.makeText(this, message, Toast.LENGTH_SHORT);
