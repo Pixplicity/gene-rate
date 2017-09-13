@@ -22,7 +22,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0-alpha6'
+        classpath 'com.android.tools.build:gradle:3.0.0-beta5'
         // Code checks
         classpath 'com.noveogroup.android:check:1.2.4'
         // used to generate a POM file
@@ -51,8 +51,8 @@ task clean(type: Delete) {
 
 ext.versions = [
 
-        versionCode: 8,
-        versionName: '1.1.6',
+        versionCode: 9,
+        versionName: '1.1.7',
         // Libs & tools
         minSdk     : 14,
         targetSdk  : 26,

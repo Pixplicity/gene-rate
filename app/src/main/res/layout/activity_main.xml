@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2017   Mathijs Lagerberg, Pixplicity BV
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,10 +13,9 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<android.support.design.widget.CoordinatorLayout
-    android:id="@+id/activity_main"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -39,13 +37,19 @@
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
             android:gravity="center"
-            android:text="When this app has been launched a few times, and after you perform an action that indicates engagement, I will ask for feedback or a rating."/>
+            android:text="When this app has been launched a few times, and after you perform an action that indicates engagement, I will ask for feedback or a rating." />
+
+        <Button
+            android:id="@+id/bt_fake"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fake app launch" />
 
         <Button
             android:id="@+id/bt_action"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Perform action"/>
+            android:text="Indicate app engagement" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -55,7 +59,7 @@
             android:layout_marginRight="40dp"
             android:layout_marginTop="10dp"
             android:gravity="center"
-            android:text="Force showing the rating request:"/>
+            android:text="Force showing the rating request:" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -67,37 +71,37 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Dialog"/>
+                android:text="Dialog" />
 
             <Button
                 android:id="@+id/bt_test_bar"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="SnackBar"/>
+                android:text="SnackBar" />
         </LinearLayout>
 
         <TextView
             android:id="@+id/tv_made_by"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            android:layout_gravity="end|center_vertical"
             android:layout_marginTop="8dp"
             android:autoLink="all"
             android:background="?android:selectableItemBackground"
             android:padding="8dp"
-            android:text="@string/made_by"/>
+            android:text="@string/made_by" />
 
         <TextView
             android:id="@+id/tv_github"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            android:layout_gravity="end|center_vertical"
             android:layout_marginBottom="8dp"
             android:autoLink="all"
             android:background="?android:selectableItemBackground"
             android:clickable="true"
             android:padding="8dp"
-            android:text="@string/github"/>
+            android:text="@string/github" />
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

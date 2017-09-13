@@ -70,6 +70,7 @@ public final class Rate {
 
     private static final String PREFS_NAME = "pirate";
     private static final String KEY_INT_LAUNCH_COUNT = "launch_count";
+    private static final String KEY_LONG_LAUNCH_COUNT = "launch_count_l";
     private static final String KEY_BOOL_ASKED = "asked";
     private static final String KEY_LONG_FIRST_LAUNCH = "first_launch";
     private static final int DEFAULT_COUNT = 6;
@@ -116,22 +117,61 @@ public final class Rate {
      */
     @NonNull
     public Rate count() {
+        return increment(false);
+    }
+
+    @NonNull
+    private Rate increment(final boolean force) {
         Editor editor = mPrefs.edit();
         // Get current launch count
-        int count = mPrefs.getInt(KEY_INT_LAUNCH_COUNT, 0);
+        long count = getCount();
         // Increment, but only when we're not on a launch point. Otherwise we could miss
         // it when .count and .showRequest calls are not called exactly alternated
-        if (count != mTriggerCount
-                && (count - mTriggerCount) % DEFAULT_REPEAT_COUNT != 0) {
+        final boolean isAtLaunchPoint = getRemainingCount() == 0;
+        if (force || !isAtLaunchPoint) {
             count++;
         }
-        editor.putInt(KEY_INT_LAUNCH_COUNT, count).apply();
+        editor.putLong(KEY_LONG_LAUNCH_COUNT, count).apply();
         // Save first launch timestamp
         if (mPrefs.getLong(KEY_LONG_FIRST_LAUNCH, -1) == -1) {
             editor.putLong(KEY_LONG_FIRST_LAUNCH, System.currentTimeMillis());
         }
         editor.apply();
         return this;
+    }
+
+    /**
+     * Returns how often The Action has been performed, ever. This is usually the app launch event.
+     *
+     * @return Number of times the app was launched.
+     */
+    private long getCount() {
+        long count = mPrefs.getLong(KEY_LONG_LAUNCH_COUNT, 0L);
+        // For apps ugrading from the 1.1.6 version:
+        if (count == 0) {
+            count = mPrefs.getInt(KEY_INT_LAUNCH_COUNT, 0);
+        }
+        return count;
+    }
+
+    /**
+     * Returns how many more times the trigger action should be performed before it triggers the
+     * rating request. This can be either the first request or consequent requests after dismissing
+     * previous ones. This method does NOT consider if the request will be shown at all, e.g. when
+     * "don't ask again" was checked.
+     * <p>
+     * If this method returns `0` (zero), the next call to {@link #showRequest()} will show the dialog.
+     * </p>
+     *
+     * @return Remaining count before the next request is triggered.
+     */
+    public long getRemainingCount() {
+        long count = getCount();
+        if (count < mTriggerCount) {
+            return mTriggerCount - count;
+        } else {
+            return (DEFAULT_REPEAT_COUNT - ((count - mTriggerCount) % DEFAULT_REPEAT_COUNT)) % DEFAULT_REPEAT_COUNT;
+        }
     }
 
     /**
@@ -152,13 +192,12 @@ public final class Rate {
      * @see Builder#setSnackBarParent(ViewGroup)
      */
     public boolean showRequest() {
-        final int count = mPrefs.getInt(KEY_INT_LAUNCH_COUNT, 0);
         final boolean asked = mPrefs.getBoolean(KEY_BOOL_ASKED, false);
         final long firstLaunch = mPrefs.getLong(KEY_LONG_FIRST_LAUNCH, 0);
-        final boolean shouldShowRequest = (count == mTriggerCount
-                || (count - mTriggerCount) % DEFAULT_REPEAT_COUNT == 0)
-                && !asked
-                && System.currentTimeMillis() > firstLaunch + mMinInstallTime;
+        final boolean shouldShowRequest =
+                getRemainingCount() == 0
+                        && !asked
+                        && System.currentTimeMillis() > firstLaunch + mMinInstallTime;
         if (shouldShowRequest && canRateApp()) {
             showRatingRequest();
         }
@@ -201,6 +240,7 @@ public final class Rate {
     }
 
     private void showRatingRequest() {
+        increment(true);
         if (mParentView == null) {
             showRatingDialog();
         } else {
@@ -215,22 +255,23 @@ public final class Rate {
         Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) snackbar.getView();
 
         // Hide default text
-        TextView textView = (TextView) layout.findViewById(android.support.design.R.id.snackbar_text);
+        TextView textView = layout.findViewById(android.support.design.R.id.snackbar_text);
         textView.setVisibility(View.INVISIBLE);
 
         // Inflate our custom view
         final LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        assert inflater != null;
         @SuppressLint("InflateParams")
         View snackView = inflater.inflate(R.layout.in_snackbar, null);
         // Configure the view
-        TextView tvMessage = (TextView) snackView.findViewById(R.id.text);
+        TextView tvMessage = snackView.findViewById(R.id.text);
         tvMessage.setText(mMessage);
-        final CheckBox checkBox = (CheckBox) snackView.findViewById(R.id.cb_never);
+        final CheckBox checkBox = snackView.findViewById(R.id.cb_never);
         checkBox.setText(mTextNever);
         checkBox.setChecked(DEFAULT_CHECKED);
-        final Button btFeedback = (Button) snackView.findViewById(R.id.bt_negative);
+        final Button btFeedback = snackView.findViewById(R.id.bt_negative);
         btFeedback.setPaintFlags(btFeedback.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        final Button btRate = (Button) snackView.findViewById(R.id.bt_positive);
+        final Button btRate = snackView.findViewById(R.id.bt_positive);
         snackView.findViewById(R.id.tv_swipe).setVisibility(
                 mSnackBarSwipeToDismiss ? View.VISIBLE : View.GONE);
 
@@ -280,11 +321,12 @@ public final class Rate {
             inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
 
+        assert inflater != null;
         @SuppressLint("InflateParams") final ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.in_dialog, null);
-        final CheckBox checkBox = (CheckBox) layout.findViewById(R.id.cb_never);
+        final CheckBox checkBox = layout.findViewById(R.id.cb_never);
         checkBox.setText(mTextNever);
         checkBox.setChecked(DEFAULT_CHECKED);
-        final Button btFeedback = (Button) layout.findViewById(R.id.bt_negative);
+        final Button btFeedback = layout.findViewById(R.id.bt_negative);
         btFeedback.setPaintFlags(btFeedback.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
         // Build dialog with positive and cancel buttons
@@ -386,7 +428,7 @@ public final class Rate {
         mPrefs.edit().putBoolean(KEY_BOOL_ASKED, true).apply();
     }
 
-    @SuppressWarnings({"unused", "WeakerAccess"})
+    @SuppressWarnings({"unused", "WeakerAccess", "SameParameterValue"})
     public static class Builder {
 
         private final Rate mRate;

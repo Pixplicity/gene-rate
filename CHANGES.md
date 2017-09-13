@@ -1,11 +1,19 @@
 # Changes
 
+### 1.1.7 (Sep 2017)
+
+- Updated Gradle plugin and wrapper
+- Fixed: Snackbar would appear too often, and even when 'don't show again' was checked.
+- Added `getCount` and `getRemainingCount` methods to keep track of app launch counts.
+- More elaborate example app
+- Java 8 update 
+- Support for ridiculous number of app launches
+
 ### 1.1.6 (Jul 12, 2017)
 
 Skipped some versions due to publication issues.
 
 - Fixed: checkbox and text would appear as dark text on dark background when using a dark app theme.
-
 
 ### 1.1.3 (Jun 15, 2017)
 

@@ -20,4 +20,9 @@
     <string name="made_by">Made with love by <a>Pixplicity</a></string>
     <string name="github_link">https://github.com/Pixplicity/gene-rate/</string>
     <string name="github">Available on <a>GitHub</a></string>
+    <plurals name="toast_x_more_times">
+        <item quantity="one">Launch the app %d more time</item>
+        <item quantity="other">Launch the app %d more times</item>
+    </plurals>
+
 </resources>
