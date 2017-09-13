@@ -70,6 +70,7 @@ public final class Rate {
 
     private static final String PREFS_NAME = "pirate";
     private static final String KEY_INT_LAUNCH_COUNT = "launch_count";
+    private static final String KEY_LONG_LAUNCH_COUNT = "launch_count_l";
     private static final String KEY_BOOL_ASKED = "asked";
     private static final String KEY_LONG_FIRST_LAUNCH = "first_launch";
     private static final int DEFAULT_COUNT = 6;
@@ -123,14 +124,14 @@ public final class Rate {
     private Rate increment(final boolean force) {
         Editor editor = mPrefs.edit();
         // Get current launch count
-        int count = getCount();
+        long count = getCount();
         // Increment, but only when we're not on a launch point. Otherwise we could miss
         // it when .count and .showRequest calls are not called exactly alternated
         final boolean isAtLaunchPoint = getRemainingCount() == 0;
         if (force || !isAtLaunchPoint) {
             count++;
         }
-        editor.putInt(KEY_INT_LAUNCH_COUNT, count).apply();
+        editor.putLong(KEY_LONG_LAUNCH_COUNT, count).apply();
         // Save first launch timestamp
         if (mPrefs.getLong(KEY_LONG_FIRST_LAUNCH, -1) == -1) {
             editor.putLong(KEY_LONG_FIRST_LAUNCH, System.currentTimeMillis());
@@ -144,8 +145,13 @@ public final class Rate {
      *
      * @return Number of times the app was launched.
      */
-    private int getCount() {
-        return mPrefs.getInt(KEY_INT_LAUNCH_COUNT, 0);
+    private long getCount() {
+        long count = mPrefs.getLong(KEY_LONG_LAUNCH_COUNT, 0L);
+        // For apps ugrading from the 1.1.6 version:
+        if (count == 0) {
+            count = mPrefs.getInt(KEY_INT_LAUNCH_COUNT, 0);
+        }
+        return count;
     }
 
     /**
@@ -159,8 +165,8 @@ public final class Rate {
      *
      * @return Remaining count before the next request is triggered.
      */
-    public int getRemainingCount() {
-        int count = getCount();
+    public long getRemainingCount() {
+        long count = getCount();
         if (count < mTriggerCount) {
             return mTriggerCount - count;
         } else {

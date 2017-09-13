@@ -7,6 +7,7 @@
 - Added `getCount` and `getRemainingCount` methods to keep track of app launch counts.
 - More elaborate example app
 - Java 8 update 
+- Support for ridiculous number of app launches
 
 ### 1.1.6 (Jul 12, 2017)
 
