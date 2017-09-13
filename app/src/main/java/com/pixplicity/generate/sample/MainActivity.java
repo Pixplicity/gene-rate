@@ -16,23 +16,22 @@
 
 package com.pixplicity.generate.sample;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.pixplicity.generate.OnFeedbackListener;
 import com.pixplicity.generate.Rate;
 
 public class MainActivity extends AppCompatActivity {
 
     private Rate mRateDialog, mRateBar;
+    private Toast mToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,26 +40,13 @@ public class MainActivity extends AppCompatActivity {
 
         ViewGroup root = (ViewGroup) findViewById(R.id.activity_main);
         Button btAction = (Button) findViewById(R.id.bt_action);
+        Button btFake = (Button) findViewById(R.id.bt_fake);
         Button btTestDialog = (Button) findViewById(R.id.bt_test_dialog);
         Button btTestBar = (Button) findViewById(R.id.bt_test_bar);
-        btAction.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onActionPerformed();
-            }
-        });
-        btTestDialog.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onTestDialogClicked();
-            }
-        });
-        btTestBar.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onTestBarClicked();
-            }
-        });
+        btAction.setOnClickListener(view -> onActionPerformed());
+        btFake.setOnClickListener(view -> onAppLaunched());
+        btTestDialog.setOnClickListener(view -> onTestDialogClicked());
+        btTestBar.setOnClickListener(view -> onTestBarClicked());
 
         mRateDialog = new Rate.Builder(this)
                 .setTriggerCount(3)
@@ -71,48 +57,53 @@ public class MainActivity extends AppCompatActivity {
         mRateBar = new Rate.Builder(this)
                 .setMessage(R.string.please_rate_short)
                 .setMinimumInstallTime(0)
-                .setFeedbackAction(new OnFeedbackListener() {
-                    @Override
-                    public void onFeedbackTapped() {
-                        Toast.makeText(MainActivity.this, "Meh", Toast.LENGTH_SHORT).show();
-                    }
-                })
+                .setFeedbackAction(() -> Toast.makeText(MainActivity.this, "Meh", Toast.LENGTH_SHORT).show())
                 .setSnackBarParent(root)
                 .build();
 
         TextView tvMadeBy = (TextView) findViewById(R.id.tv_made_by);
-        tvMadeBy.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse(getString(R.string.pix_link)));
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-            }
+        tvMadeBy.setOnClickListener(view -> {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(getString(R.string.pix_link)));
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
         });
 
         TextView tvGitHub = (TextView) findViewById(R.id.tv_github);
-        tvGitHub.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse(getString(R.string.github_link)));
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-            }
+        tvGitHub.setOnClickListener(view -> {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(getString(R.string.github_link)));
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
         });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mRateDialog.count();
+        onAppLaunched();
     }
 
     private void onActionPerformed() {
         if (!mRateDialog.showRequest()) {
-            Toast.makeText(this, "Launch the app a few more times", Toast.LENGTH_SHORT).show();
+            showRemainingCount();
         }
+    }
+
+    private void onAppLaunched() {
+        mRateDialog.count();
+        showRemainingCount();
+    }
+
+    @SuppressLint("ShowToast")
+    private synchronized void showRemainingCount() {
+        int count = mRateDialog.getRemainingCount();
+        String message = getResources().getQuantityString(R.plurals.toast_x_more_times, count, count);
+        if (mToast == null) {
+            mToast = Toast.makeText(this, message, Toast.LENGTH_SHORT);
+        }
+        mToast.setText(message);
+        mToast.show();
     }
 
     private void onTestDialogClicked() {
