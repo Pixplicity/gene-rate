@@ -51,8 +51,8 @@ task clean(type: Delete) {
 
 ext.versions = [
 
-        versionCode: 9,
-        versionName: '1.1.7',
+        versionCode: 10,
+        versionName: '1.1.8',
         // Libs & tools
         minSdk     : 14,
         targetSdk  : 26,
