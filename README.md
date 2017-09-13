@@ -77,10 +77,10 @@ Just look:
 
 ```java
 Rate rate = new Rate.Builder(context)
-	.setTriggerCount(10)
-	.setMessage(R.string.my_message_text)
-	.setFeedbackAction(Uri.parse("mailto:example@example.com"))
-	.build();
+        .setTriggerCount(10)
+        .setMessage(R.string.my_message_text)
+        .setFeedbackAction(Uri.parse("mailto:example@example.com"))
+        .build();
 
 // When launching the app
 rate.count();
@@ -91,7 +91,7 @@ rate.showRequest();
 
 That's the gist of it! That bit of code will show **a dialog** when the time is ripe. Personally
 though, we prefer showing **a SnackBar** instead - it's a lot less intrusive! To show the SnackBar
-instead of the dialog simple call the following on the builder:
+instead of the dialog simply call the following on the builder:
 
 ```java
 	.setSnackBarParent(myRootView)
@@ -110,21 +110,21 @@ Here is a final, complete example of what Gene-rate can do:
 
 ```java
 Rate rate = new Rate.Builder(context)
-	.setTriggerCount(10)								// Optional, defaults to 6
-	.setMinimumInstallTime(TimeUnit.DAYS.toMillis(7))	// Optional, defaults to 7 days
-    .setFeedbackAction(new OnFeedbackListener() {		// Optional
+    .setTriggerCount(10)                                // Optional, defaults to 6
+    .setMinimumInstallTime(TimeUnit.DAYS.toMillis(7))   // Optional, defaults to 7 days
+    .setFeedbackAction(new OnFeedbackListener() {       // Optional
         @Override
         public void onFeedbackTapped() {
             Toast.makeText(MainActivity.this, "Meh", Toast.LENGTH_SHORT).show();
         }
     })
-    .setSnackBarParent(root)							// Optional, shows dialog by default
-    .setMessage(R.string.rating_message)				// Optional
-    .setPositiveButton("Sure!")							// Optional
-    .setCancelButton("Maybe later")						// Optional
-    .setNegativeButton("Nope!")							// Optional
-    .setSwipeToDismissVisible(false)					// Add this when using the Snackbar
-    													// without a CoordinatorLayout as a parent.
+    .setSnackBarParent(root)                            // Optional, shows dialog by default
+    .setMessage(R.string.rating_message)                // Optional
+    .setPositiveButton("Sure!")                         // Optional
+    .setCancelButton("Maybe later")                     // Optional
+    .setNegativeButton("Nope!")                         // Optional
+    .setSwipeToDismissVisible(false)                    // Add this when using the Snackbar
+                                                        // without a CoordinatorLayout as a parent.
     .build();
 ```
 
