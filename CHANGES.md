@@ -1,9 +1,13 @@
 # Changes
 
+### 1.1.9 (Sep 2017)
+
+- Fixed: dimissing Snackbar would not store the checkbox state.
+
 ### 1.1.7 (Sep 2017)
 
 - Updated Gradle plugin and wrapper
-- Fixed: Snackbar would appear too often, and even when 'don't show again' was checked.
+- Fixed: Snackbar would appear too often.
 - Added `getCount` and `getRemainingCount` methods to keep track of app launch counts.
 - More elaborate example app
 - Java 8 update 
