@@ -275,6 +275,18 @@ public final class Rate {
         snackView.findViewById(R.id.tv_swipe).setVisibility(
                 mSnackBarSwipeToDismiss ? View.VISIBLE : View.GONE);
 
+        // Remember to not ask again if user swiped it
+        snackbar.addCallback(new Snackbar.Callback() {
+            @Override
+            public void onDismissed(Snackbar transientBottomBar, @DismissEvent int event) {
+                super.onDismissed(transientBottomBar, event);
+                if (event == Snackbar.Callback.DISMISS_EVENT_SWIPE
+                        && checkBox.isChecked()) {
+                    saveAsked();
+                }
+            }
+        });
+
         // Rate listener
         btRate.setOnClickListener(new View.OnClickListener() {
             @Override
