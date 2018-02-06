@@ -1,5 +1,9 @@
 # Changes
 
+### 1.1.9 (Feb 2018)
+
+- Added: callback listeners for rating and dismissal.
+
 ### 1.1.8 (Sep 2017)
 
 - Fixed: dimissing Snackbar would not store the checkbox state.
