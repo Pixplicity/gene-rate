@@ -117,6 +117,14 @@ Rate rate = new Rate.Builder(context)
         public void onFeedbackTapped() {
             Toast.makeText(MainActivity.this, "Meh", Toast.LENGTH_SHORT).show();
         }
+        @Override
+        public void onRatingTapped() {
+            // User was redirected to the Play Store
+        }
+        @Override
+        public void onRequestDismissed(boolean dontAskAgain) {
+            // User has dismissed the request
+        }
     })
     .setSnackBarParent(root)                            // Optional, shows dialog by default
     .setMessage(R.string.rating_message)                // Optional

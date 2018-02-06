@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017    Mathijs Lagerberg, Pixplicity BV
+ * Copyright (c) 2017,2018   Mathijs Lagerberg, Pixplicity BV
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -263,12 +263,13 @@ public final class Rate {
         assert inflater != null;
         @SuppressLint("InflateParams")
         View snackView = inflater.inflate(R.layout.in_snackbar, null);
+
         // Configure the view
         TextView tvMessage = snackView.findViewById(R.id.text);
         tvMessage.setText(mMessage);
-        final CheckBox checkBox = snackView.findViewById(R.id.cb_never);
-        checkBox.setText(mTextNever);
-        checkBox.setChecked(DEFAULT_CHECKED);
+        final CheckBox cbNever = snackView.findViewById(R.id.cb_never);
+        cbNever.setText(mTextNever);
+        cbNever.setChecked(DEFAULT_CHECKED);
         final Button btFeedback = snackView.findViewById(R.id.bt_negative);
         btFeedback.setPaintFlags(btFeedback.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         final Button btRate = snackView.findViewById(R.id.bt_positive);
@@ -281,9 +282,10 @@ public final class Rate {
             public void onDismissed(Snackbar transientBottomBar, @DismissEvent int event) {
                 super.onDismissed(transientBottomBar, event);
                 if (event == Snackbar.Callback.DISMISS_EVENT_SWIPE
-                        && checkBox.isChecked()) {
+                        && cbNever.isChecked()) {
                     saveAsked();
                 }
+                mFeedbackAction.onRequestDismissed(cbNever.isChecked());
             }
         });
 
@@ -294,8 +296,10 @@ public final class Rate {
                 snackbar.dismiss();
                 openPlayStore();
                 saveAsked();
+                mFeedbackAction.onRateTapped();
             }
         });
+
         // Feedback listener
         if (mFeedbackAction != null) {
             btFeedback.setText(mTextNegative);
@@ -303,7 +307,7 @@ public final class Rate {
             btFeedback.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (checkBox.isChecked()) {
+                    if (cbNever.isChecked()) {
                         saveAsked();
                     }
                     snackbar.dismiss();
@@ -311,8 +315,9 @@ public final class Rate {
                 }
             });
         }
+
         // Checkbox listener
-        checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+        cbNever.setOnCheckedChangeListener(new OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton button, boolean checked) {
                 mPrefs.edit().putBoolean(KEY_BOOL_ASKED, checked).apply();
@@ -321,6 +326,7 @@ public final class Rate {
 
         // Add the view to the Snackbar's layout
         layout.addView(snackView, 0);
+
         // Show the Snackbar
         snackbar.show();
     }
@@ -353,16 +359,18 @@ public final class Rate {
                         openPlayStore();
                         saveAsked();
                         anInterface.dismiss();
+                        mFeedbackAction.onRateTapped();
                     }
                 })
                 // Cancel -> close dialog, ask again later
                 .setNeutralButton(mTextCancel, new OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface anInterface, int i) {
+                    public void onClick(DialogInterface dialog, int i) {
                         if (checkBox.isChecked()) {
                             saveAsked();
                         }
-                        anInterface.dismiss();
+                        dialog.dismiss();
+                        mFeedbackAction.onRequestDismissed(checkBox.isChecked());
                     }
                 });
 
@@ -376,6 +384,7 @@ public final class Rate {
                             if (checkBox.isChecked()) {
                                 saveAsked();
                             }
+                            mFeedbackAction.onRequestDismissed(checkBox.isChecked());
                         }
                     });
         }
@@ -432,8 +441,7 @@ public final class Rate {
         return mContext
                 .getPackageManager()
                 .queryIntentActivities(intent, 0)
-                .size()
-                > 0;
+                .size() > 0;
     }
 
     private void saveAsked() {
@@ -617,7 +625,7 @@ public final class Rate {
             if (uri == null) {
                 mRate.mFeedbackAction = null;
             } else {
-                mRate.mFeedbackAction = new OnFeedbackListener() {
+                mRate.mFeedbackAction = new OnFeedbackAdapter() {
 
                     @Override
                     public void onFeedbackTapped() {
