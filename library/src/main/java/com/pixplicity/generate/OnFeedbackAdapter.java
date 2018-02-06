@@ -16,11 +16,17 @@
 
 package com.pixplicity.generate;
 
-public interface OnFeedbackListener {
+/**
+ * Default, empty implementations of the {@link OnFeedbackListener} methods.
+ */
+public class OnFeedbackAdapter implements OnFeedbackListener {
 
-    void onFeedbackTapped();
+    public void onFeedbackTapped() {
+    }
 
-    void onRateTapped();
+    public void onRateTapped() {
+    }
 
-    void onRequestDismissed(boolean dontAskAgain);
+    public void onRequestDismissed(boolean dontAskAgain) {
+    }
 }

@@ -26,6 +26,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.pixplicity.generate.OnFeedbackListener;
 import com.pixplicity.generate.Rate;
 
 public class MainActivity extends AppCompatActivity {
@@ -38,11 +39,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ViewGroup root = (ViewGroup) findViewById(R.id.activity_main);
-        Button btAction = (Button) findViewById(R.id.bt_action);
-        Button btFake = (Button) findViewById(R.id.bt_fake);
-        Button btTestDialog = (Button) findViewById(R.id.bt_test_dialog);
-        Button btTestBar = (Button) findViewById(R.id.bt_test_bar);
+        ViewGroup root = findViewById(R.id.activity_main);
+        Button btAction = findViewById(R.id.bt_action);
+        Button btFake = findViewById(R.id.bt_fake);
+        Button btTestDialog = findViewById(R.id.bt_test_dialog);
+        Button btTestBar = findViewById(R.id.bt_test_bar);
         btAction.setOnClickListener(view -> onActionPerformed());
         btFake.setOnClickListener(view -> onAppLaunched());
         btTestDialog.setOnClickListener(view -> onTestDialogClicked());
@@ -57,11 +58,30 @@ public class MainActivity extends AppCompatActivity {
         mRateBar = new Rate.Builder(this)
                 .setMessage(R.string.please_rate_short)
                 .setMinimumInstallTime(0)
-                .setFeedbackAction(() -> Toast.makeText(MainActivity.this, "Meh", Toast.LENGTH_SHORT).show())
+                .setFeedbackAction(new OnFeedbackListener() {
+                    @Override
+                    public void onFeedbackTapped() {
+                        Toast.makeText(MainActivity.this, "Meh", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onRateTapped() {
+                        Toast.makeText(MainActivity.this, "Redirecting to the Play Store...", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onRequestDismissed(boolean dontAskAgain) {
+                        if (dontAskAgain) {
+                            Toast.makeText(MainActivity.this, "Ok then, I won't bother you again.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(MainActivity.this, "Ok, I'll ask again later.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
                 .setSnackBarParent(root)
                 .build();
 
-        TextView tvMadeBy = (TextView) findViewById(R.id.tv_made_by);
+        TextView tvMadeBy = findViewById(R.id.tv_made_by);
         tvMadeBy.setOnClickListener(view -> {
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(Uri.parse(getString(R.string.pix_link)));
@@ -69,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        TextView tvGitHub = (TextView) findViewById(R.id.tv_github);
+        TextView tvGitHub = findViewById(R.id.tv_github);
         tvGitHub.setOnClickListener(view -> {
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(Uri.parse(getString(R.string.github_link)));
