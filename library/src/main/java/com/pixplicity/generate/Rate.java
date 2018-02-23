@@ -75,6 +75,7 @@ public final class Rate {
     private static final String KEY_LONG_FIRST_LAUNCH = "first_launch";
     private static final int DEFAULT_COUNT = 6;
     private static final int DEFAULT_REPEAT_COUNT = 30;
+
     private static final long DEFAULT_INSTALL_TIME = TimeUnit.DAYS.toMillis(5);
     private static final boolean DEFAULT_CHECKED = true;
 
@@ -84,6 +85,7 @@ public final class Rate {
     private CharSequence mMessage, mTextPositive, mTextNegative, mTextCancel, mTextNever;
     private int mTriggerCount = DEFAULT_COUNT;
     private long mMinInstallTime = DEFAULT_INSTALL_TIME;
+    private int mRepeatCount = DEFAULT_REPEAT_COUNT;
     private ViewGroup mParentView;
     private OnFeedbackListener mFeedbackAction;
     private boolean mSnackBarSwipeToDismiss = true;
@@ -170,7 +172,7 @@ public final class Rate {
         if (count < mTriggerCount) {
             return mTriggerCount - count;
         } else {
-            return (DEFAULT_REPEAT_COUNT - ((count - mTriggerCount) % DEFAULT_REPEAT_COUNT)) % DEFAULT_REPEAT_COUNT;
+            return (mRepeatCount - ((count - mTriggerCount) % mRepeatCount)) % mRepeatCount;
         }
     }
 
@@ -495,6 +497,18 @@ public final class Rate {
         @NonNull
         public Builder setMessage(@Nullable CharSequence message) {
             mRate.mMessage = message;
+            return this;
+        }
+
+        /**
+         * Sets the repeat count to bother the user again if "don't ask again" was checked.
+         *
+         * @param repeatCount Integer how often rate will wait if "don't ask again" was checked (default 30).
+         * @return The current {@link Builder}
+         */
+        @NonNull
+        public Builder setRepeatCount(@Nullable int repeatCount) {
+            mRate.mRepeatCount = repeatCount;
             return this;
         }
 
