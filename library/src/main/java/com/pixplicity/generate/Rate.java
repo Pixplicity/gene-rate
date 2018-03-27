@@ -697,9 +697,9 @@ public final class Rate {
          * @return The current {@link Builder}
         */
         public Builder setRateDestinationStore(String rateDestinationStore) {
-            if(!TextUtils.isEmpty(rateDestination) {
+            if(!TextUtils.isEmpty(rateDestination)) {
                 mRate.mUnknownStore = true;
-                mRate.mStoreLink = rateDestinationStore
+                mRate.mStoreLink = rateDestinationStore;
             }
             return this;
         }
