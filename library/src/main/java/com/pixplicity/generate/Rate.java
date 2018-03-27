@@ -42,6 +42,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
+import android.text.TextUtils;
 
 import java.util.concurrent.TimeUnit;
 
@@ -89,7 +90,9 @@ public final class Rate {
     private ViewGroup mParentView;
     private OnFeedbackListener mFeedbackAction;
     private boolean mSnackBarSwipeToDismiss = true;
-
+    private boolean mUnknownStore = false;
+    private String mStoreLink;
+    
     private Rate(@NonNull Context context) {
         mContext = context;
         mPrefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
@@ -214,8 +217,9 @@ public final class Rate {
      */
     @NonNull
     private Intent getStoreIntent() {
-        final Uri uri = Uri.parse("market://details?id=" + mPackageName);
+        final Uri uri = Uri.parse(mUnknownStore ? mStoreLink : "market://details?id=" + mPackageName);
         return new Intent(Intent.ACTION_VIEW, uri);
+        }
     }
 
     /**
@@ -680,6 +684,23 @@ public final class Rate {
         @NonNull
         public Builder setSnackBarParent(@Nullable ViewGroup parent) {
             mRate.mParentView = parent;
+            return this;
+        }
+        
+        /**
+         * Sets the destination rate link if not Google Play.
+         *
+         * @param rateDestinationStore The destination link 
+         *        (i.e. "amzn://apps/android?p=com.pixplicity.generate" ). Keeps default Google Play store
+         *        as destination if rateDestinationStore is {@code null} or empty.
+         *
+         * @return The current {@link Builder}
+        */
+        public Builder setRateDestinationStore(String rateDestinationStore) {
+            if(!TextUtils.isEmpty(rateDestination)) {
+                mRate.mUnknownStore = true;
+                mRate.mStoreLink = rateDestinationStore;
+            }
             return this;
         }
 
