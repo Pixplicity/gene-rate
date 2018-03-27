@@ -237,6 +237,7 @@ public final class Rate {
      *
      * @return the {@link Rate} instance
      */
+    @SuppressWarnings("unused")
     @NonNull
     public Rate reset() {
         mPrefs.edit().clear().apply();
