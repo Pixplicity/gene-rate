@@ -34,6 +34,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +43,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
-import android.text.TextUtils;
 
 import java.util.concurrent.TimeUnit;
 
@@ -90,9 +90,8 @@ public final class Rate {
     private ViewGroup mParentView;
     private OnFeedbackListener mFeedbackAction;
     private boolean mSnackBarSwipeToDismiss = true;
-    private boolean mUnknownStore = false;
     private String mStoreLink;
-    
+
     private Rate(@NonNull Context context) {
         mContext = context;
         mPrefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
@@ -217,9 +216,8 @@ public final class Rate {
      */
     @NonNull
     private Intent getStoreIntent() {
-        final Uri uri = Uri.parse(mUnknownStore ? mStoreLink : "market://details?id=" + mPackageName);
+        final Uri uri = Uri.parse(mStoreLink != null ? mStoreLink : ("market://details?id=" + mPackageName));
         return new Intent(Intent.ACTION_VIEW, uri);
-        }
     }
 
     /**
@@ -511,7 +509,7 @@ public final class Rate {
          * @return The current {@link Builder}
          */
         @NonNull
-        public Builder setRepeatCount(@Nullable int repeatCount) {
+        public Builder setRepeatCount(int repeatCount) {
             mRate.mRepeatCount = repeatCount;
             return this;
         }
@@ -686,19 +684,17 @@ public final class Rate {
             mRate.mParentView = parent;
             return this;
         }
-        
+
         /**
          * Sets the destination rate link if not Google Play.
          *
-         * @param rateDestinationStore The destination link 
-         *        (i.e. "amzn://apps/android?p=com.pixplicity.generate" ). Keeps default Google Play store
-         *        as destination if rateDestinationStore is {@code null} or empty.
-         *
+         * @param rateDestinationStore The destination link
+         *                             (i.e. "amzn://apps/android?p=com.pixplicity.generate" ). Keeps default Google Play store
+         *                             as destination if rateDestinationStore is {@code null} or empty.
          * @return The current {@link Builder}
-        */
+         */
         public Builder setRateDestinationStore(String rateDestinationStore) {
-            if(!TextUtils.isEmpty(rateDestination)) {
-                mRate.mUnknownStore = true;
+            if (!TextUtils.isEmpty(rateDestinationStore)) {
                 mRate.mStoreLink = rateDestinationStore;
             }
             return this;
