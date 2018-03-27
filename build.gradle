@@ -24,7 +24,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:3.0.1'
         // Code checks
-        classpath 'com.noveogroup.android:check:1.2.4'
+        classpath 'com.noveogroup.android:check:1.2.5'
         // used to generate a POM file
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
 
@@ -52,7 +52,7 @@ task clean(type: Delete) {
 ext.versions = [
 
         versionCode: 11,
-        versionName: '1.1.9',
+        versionName: '1.2.0',
         // Libs & tools
         minSdk     : 14,
         targetSdk  : 27,
