@@ -77,15 +77,16 @@ Just look:
 
 ```java
 Rate rate = new Rate.Builder(context)
-        .setTriggerCount(10)
+        .setTriggerCount(10)  // Show request after 10 app launches
         .setMessage(R.string.my_message_text)
         .setFeedbackAction(Uri.parse("mailto:example@example.com"))
         .build();
 
-// When launching the app
+// When launching the app, increment the counter
 rate.count();
 
-// After the user performs a positive action, when it is a good time to show a rating request
+// After the user performs a positive action, when it is a good time to show a rating request,
+// allow displaying the dialog. If the counter has reached its minimum trigger number, it will now show.
 rate.showRequest();
 ```
 
@@ -110,7 +111,10 @@ Here is a final, complete example of what Gene-rate can do:
 
 ```java
 Rate rate = new Rate.Builder(context)
-    .setTriggerCount(10)                                // Optional, defaults to 6
+    // Trigger dialog after this many events (optional, defaults to 6)
+    .setTriggerCount(10)
+    // After dismissal, trigger again after this many events (optional, defaults to 30)
+    .setRepeatCount(10)
     .setMinimumInstallTime(TimeUnit.DAYS.toMillis(7))   // Optional, defaults to 7 days
     .setFeedbackAction(new OnFeedbackListener() {       // Optional
         @Override
