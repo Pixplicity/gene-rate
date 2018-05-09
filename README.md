@@ -156,4 +156,4 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ```
 
-[1]: https://www.dancounsell.com/articles/prompting-for-app-reviews
+[1]: https://medium.com/@dancounsell/prompting-for-app-reviews-97d9e78dd5fd
