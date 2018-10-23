@@ -290,7 +290,9 @@ public final class Rate {
                         && cbNever.isChecked()) {
                     saveAsked();
                 }
-                mFeedbackAction.onRequestDismissed(cbNever.isChecked());
+                if (mFeedbackAction != null) {
+                    mFeedbackAction.onRequestDismissed(cbNever.isChecked());
+                }
             }
         });
 
@@ -301,7 +303,9 @@ public final class Rate {
                 snackbar.dismiss();
                 openPlayStore();
                 saveAsked();
-                mFeedbackAction.onRateTapped();
+                if (mFeedbackAction != null) {
+                    mFeedbackAction.onRateTapped();
+                }
             }
         });
 
@@ -316,7 +320,9 @@ public final class Rate {
                         saveAsked();
                     }
                     snackbar.dismiss();
-                    mFeedbackAction.onFeedbackTapped();
+                    if (mFeedbackAction != null) {
+                        mFeedbackAction.onFeedbackTapped();
+                    }
                 }
             });
         }
@@ -364,7 +370,9 @@ public final class Rate {
                         openPlayStore();
                         saveAsked();
                         anInterface.dismiss();
-                        mFeedbackAction.onRateTapped();
+                        if (mFeedbackAction != null) {
+                            mFeedbackAction.onRateTapped();
+                        }
                     }
                 })
                 // Cancel -> close dialog, ask again later
@@ -375,7 +383,9 @@ public final class Rate {
                             saveAsked();
                         }
                         dialog.dismiss();
-                        mFeedbackAction.onRequestDismissed(checkBox.isChecked());
+                        if (mFeedbackAction != null) {
+                            mFeedbackAction.onRequestDismissed(checkBox.isChecked());
+                        }
                     }
                 });
 
@@ -389,7 +399,9 @@ public final class Rate {
                             if (checkBox.isChecked()) {
                                 saveAsked();
                             }
-                            mFeedbackAction.onRequestDismissed(checkBox.isChecked());
+                            if (mFeedbackAction != null) {
+                                mFeedbackAction.onRequestDismissed(checkBox.isChecked());
+                            }
                         }
                     });
         }
@@ -408,7 +420,9 @@ public final class Rate {
                         saveAsked();
                     }
                     dialog.dismiss();
-                    mFeedbackAction.onFeedbackTapped();
+                    if (mFeedbackAction != null) {
+                        mFeedbackAction.onFeedbackTapped();
+                    }
                 }
             });
         }
