@@ -16,15 +16,12 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:layout_gravity="center"
-              android:gravity="center_vertical"
               android:orientation="vertical"
+              android:gravity="center_vertical"
               android:padding="12dp"
-              android:theme="@style/ThemeOverlay.AppCompat.Dark"
-              tools:background="#000000">
+              xmlns:tools="http://schemas.android.com/tools">
 
     <TextView
         android:id="@+id/tv_swipe"
@@ -32,7 +29,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/swipe_to_dismiss"
-        android:textColor="#90ffffff"
+        android:alpha="0.5"
         android:textSize="12sp"/>
 
     <TextView

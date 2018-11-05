@@ -135,6 +135,8 @@ Rate rate = new Rate.Builder(context)
     .setPositiveButton("Sure!")                         // Optional
     .setCancelButton("Maybe later")                     // Optional
     .setNegativeButton("Nope!")                         // Optional
+    .setFeedbackText("Holla at us")                     // Optional
+    .setLightTheme(true)                                // Default is dark
     .setSwipeToDismissVisible(false)                    // Add this when using the Snackbar
                                                         // without a CoordinatorLayout as a parent.
     .build();

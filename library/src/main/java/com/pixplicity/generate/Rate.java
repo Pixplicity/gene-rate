@@ -27,9 +27,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Paint;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
+import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
@@ -74,8 +76,13 @@ public final class Rate {
     private static final String KEY_LONG_LAUNCH_COUNT = "launch_count_l";
     private static final String KEY_BOOL_ASKED = "asked";
     private static final String KEY_LONG_FIRST_LAUNCH = "first_launch";
+    private static final int THEME_DARK = 0;
+    private static final int THEME_LIGHT = 1;
     private static final int DEFAULT_COUNT = 6;
     private static final int DEFAULT_REPEAT_COUNT = 30;
+
+    @Theme
+    private static final int DEFAULT_THEME = THEME_DARK;
 
     private static final long DEFAULT_INSTALL_TIME = TimeUnit.DAYS.toMillis(5);
     private static final boolean DEFAULT_CHECKED = true;
@@ -91,6 +98,9 @@ public final class Rate {
     private OnFeedbackListener mFeedbackAction;
     private boolean mSnackBarSwipeToDismiss = true;
     private String mStoreLink;
+
+    @Theme
+    private int mTheme = DEFAULT_THEME;
 
     private Rate(@NonNull Context context) {
         mContext = context;
@@ -165,7 +175,8 @@ public final class Rate {
      * previous ones. This method does NOT consider if the request will be shown at all, e.g. when
      * "don't ask again" was checked.
      * <p>
-     * If this method returns `0` (zero), the next call to {@link #showRequest()} will show the dialog.
+     * If this method returns `0` (zero), the next call to {@link #showRequest()} will show the
+     * dialog.
      * </p>
      *
      * @return Remaining count before the next request is triggered.
@@ -267,8 +278,15 @@ public final class Rate {
         // Inflate our custom view
         final LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         assert inflater != null;
+        int layoutId = mTheme == THEME_DARK
+                ? R.layout.in_snackbar_dark
+                : R.layout.in_snackbar_light;
         @SuppressLint("InflateParams")
-        View snackView = inflater.inflate(R.layout.in_snackbar, null);
+        View snackView = inflater.inflate(layoutId, null);
+        if (snackView.getBackground() != null) {
+            int backgroundColor = ((ColorDrawable) snackView.getBackground()).getColor();
+            layout.setBackgroundColor(backgroundColor);
+        }
 
         // Configure the view
         TextView tvMessage = snackView.findViewById(R.id.text);
@@ -470,6 +488,11 @@ public final class Rate {
         mPrefs.edit().putBoolean(KEY_BOOL_ASKED, true).apply();
     }
 
+    @IntDef({THEME_LIGHT, THEME_DARK})
+    @interface Theme {
+
+    }
+
     @SuppressWarnings({"unused", "WeakerAccess", "SameParameterValue"})
     public static class Builder {
 
@@ -507,6 +530,12 @@ public final class Rate {
             return this;
         }
 
+        @NonNull
+        public Builder setLightTheme(boolean lightTheme) {
+            mRate.mTheme = lightTheme ? THEME_LIGHT : THEME_DARK;
+            return this;
+        }
+
         /**
          * Sets the message to show in the rating request.
          *
@@ -523,7 +552,8 @@ public final class Rate {
         /**
          * Sets the repeat count to bother the user again if "don't ask again" was checked.
          *
-         * @param repeatCount Integer how often rate will wait if "don't ask again" was checked (default 30).
+         * @param repeatCount Integer how often rate will wait if "don't ask again" was checked
+         *                    (default 30).
          * @return The current {@link Builder}
          */
         @NonNull
@@ -730,8 +760,10 @@ public final class Rate {
          * Sets the destination rate link if not Google Play.
          *
          * @param rateDestinationStore The destination link
-         *                             (i.e. "amzn://apps/android?p=com.pixplicity.generate" ). Keeps default Google Play store
-         *                             as destination if rateDestinationStore is {@code null} or empty.
+         *                             (i.e. "amzn://apps/android?p=com.pixplicity.generate" ).
+         *                             Keeps default Google Play store
+         *                             as destination if rateDestinationStore is {@code null} or
+         *                             empty.
          * @return The current {@link Builder}
          */
         public Builder setRateDestinationStore(String rateDestinationStore) {

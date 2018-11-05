@@ -64,6 +64,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <Button
@@ -74,11 +75,18 @@
                 android:text="Dialog" />
 
             <Button
-                android:id="@+id/bt_test_bar"
+                android:id="@+id/bt_test_bar_dark"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="SnackBar" />
+                android:text="SnackBar Dark" />
+
+            <Button
+                android:id="@+id/bt_test_bar_light"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="SnackBar Light" />
         </LinearLayout>
 
         <TextView
@@ -102,6 +110,7 @@
             android:background="?android:selectableItemBackground"
             android:clickable="true"
             android:padding="8dp"
-            android:text="@string/github" />
+            android:text="@string/github"
+            android:focusable="true"/>
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>
