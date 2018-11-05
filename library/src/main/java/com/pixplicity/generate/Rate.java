@@ -83,7 +83,7 @@ public final class Rate {
     private final SharedPreferences mPrefs;
     private final String mPackageName;
     private final Context mContext;
-    private CharSequence mMessage, mTextPositive, mTextNegative, mTextCancel, mTextNever;
+    private CharSequence mMessage, mTextPositive, mTextNegative, mTextCancel, mTextNever, mTextFeedback;
     private int mTriggerCount = DEFAULT_COUNT;
     private long mMinInstallTime = DEFAULT_INSTALL_TIME;
     private int mRepeatCount = DEFAULT_REPEAT_COUNT;
@@ -101,6 +101,7 @@ public final class Rate {
         mTextNegative = context.getString(R.string.button_feedback);
         mTextCancel = context.getString(R.string.button_no);
         mTextNever = context.getString(R.string.button_dont_ask);
+        mTextFeedback = context.getString(R.string.button_feedback);
     }
 
     /**
@@ -276,6 +277,7 @@ public final class Rate {
         cbNever.setText(mTextNever);
         cbNever.setChecked(DEFAULT_CHECKED);
         final Button btFeedback = snackView.findViewById(R.id.bt_negative);
+        btFeedback.setText(mTextFeedback);
         btFeedback.setPaintFlags(btFeedback.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         final Button btRate = snackView.findViewById(R.id.bt_positive);
         snackView.findViewById(R.id.tv_swipe).setVisibility(
@@ -311,7 +313,7 @@ public final class Rate {
 
         // Feedback listener
         if (mFeedbackAction != null) {
-            btFeedback.setText(mTextNegative);
+            btFeedback.setText(mTextFeedback);
             btFeedback.setVisibility(View.VISIBLE);
             btFeedback.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -356,6 +358,7 @@ public final class Rate {
         checkBox.setText(mTextNever);
         checkBox.setChecked(DEFAULT_CHECKED);
         final Button btFeedback = layout.findViewById(R.id.bt_negative);
+        btFeedback.setText(mTextFeedback);
         btFeedback.setPaintFlags(btFeedback.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
         // Build dialog with positive and cancel buttons
@@ -641,6 +644,29 @@ public final class Rate {
         @NonNull
         public Builder setNeverAgainText(@StringRes int resId) {
             return setNeverAgainText(mRate.mContext.getString(resId));
+        }
+
+        /**
+         * Sets the text to show in the feedback link.
+         *
+         * @param message The text in the link
+         * @return The current {@link Builder}
+         */
+        @NonNull
+        public Builder setFeedbackText(@Nullable CharSequence message) {
+            mRate.mTextFeedback = message;
+            return this;
+        }
+
+        /**
+         * Sets the text to show in the feedback link.
+         *
+         * @param resId The text in the link
+         * @return The current {@link Builder}
+         */
+        @NonNull
+        public Builder setFeedbackText(@StringRes int resId) {
+            return setFeedbackText(mRate.mContext.getString(resId));
         }
 
         /**
