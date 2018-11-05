@@ -52,7 +52,6 @@ android {
         }
         release {
             minifyEnabled false
-            consumerProguardFiles 'consumer-proguard-rules.pro'
         }
     }
 
