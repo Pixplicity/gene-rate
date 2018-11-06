@@ -27,9 +27,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Paint;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
+import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
@@ -74,8 +76,13 @@ public final class Rate {
     private static final String KEY_LONG_LAUNCH_COUNT = "launch_count_l";
     private static final String KEY_BOOL_ASKED = "asked";
     private static final String KEY_LONG_FIRST_LAUNCH = "first_launch";
+    private static final int THEME_DARK = 0;
+    private static final int THEME_LIGHT = 1;
     private static final int DEFAULT_COUNT = 6;
     private static final int DEFAULT_REPEAT_COUNT = 30;
+
+    @Theme
+    private static final int DEFAULT_THEME = THEME_DARK;
 
     private static final long DEFAULT_INSTALL_TIME = TimeUnit.DAYS.toMillis(5);
     private static final boolean DEFAULT_CHECKED = true;
@@ -83,7 +90,7 @@ public final class Rate {
     private final SharedPreferences mPrefs;
     private final String mPackageName;
     private final Context mContext;
-    private CharSequence mMessage, mTextPositive, mTextNegative, mTextCancel, mTextNever;
+    private CharSequence mMessage, mTextPositive, mTextNegative, mTextCancel, mTextNever, mTextFeedback;
     private int mTriggerCount = DEFAULT_COUNT;
     private long mMinInstallTime = DEFAULT_INSTALL_TIME;
     private int mRepeatCount = DEFAULT_REPEAT_COUNT;
@@ -91,6 +98,9 @@ public final class Rate {
     private OnFeedbackListener mFeedbackAction;
     private boolean mSnackBarSwipeToDismiss = true;
     private String mStoreLink;
+
+    @Theme
+    private int mTheme = DEFAULT_THEME;
 
     private Rate(@NonNull Context context) {
         mContext = context;
@@ -101,6 +111,7 @@ public final class Rate {
         mTextNegative = context.getString(R.string.button_feedback);
         mTextCancel = context.getString(R.string.button_no);
         mTextNever = context.getString(R.string.button_dont_ask);
+        mTextFeedback = context.getString(R.string.button_feedback);
     }
 
     /**
@@ -164,7 +175,8 @@ public final class Rate {
      * previous ones. This method does NOT consider if the request will be shown at all, e.g. when
      * "don't ask again" was checked.
      * <p>
-     * If this method returns `0` (zero), the next call to {@link #showRequest()} will show the dialog.
+     * If this method returns `0` (zero), the next call to {@link #showRequest()} will show the
+     * dialog.
      * </p>
      *
      * @return Remaining count before the next request is triggered.
@@ -266,8 +278,15 @@ public final class Rate {
         // Inflate our custom view
         final LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         assert inflater != null;
+        int layoutId = mTheme == THEME_DARK
+                ? R.layout.in_snackbar_dark
+                : R.layout.in_snackbar_light;
         @SuppressLint("InflateParams")
-        View snackView = inflater.inflate(R.layout.in_snackbar, null);
+        View snackView = inflater.inflate(layoutId, null);
+        if (snackView.getBackground() != null) {
+            int backgroundColor = ((ColorDrawable) snackView.getBackground()).getColor();
+            layout.setBackgroundColor(backgroundColor);
+        }
 
         // Configure the view
         TextView tvMessage = snackView.findViewById(R.id.text);
@@ -276,6 +295,7 @@ public final class Rate {
         cbNever.setText(mTextNever);
         cbNever.setChecked(DEFAULT_CHECKED);
         final Button btFeedback = snackView.findViewById(R.id.bt_negative);
+        btFeedback.setText(mTextFeedback);
         btFeedback.setPaintFlags(btFeedback.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         final Button btRate = snackView.findViewById(R.id.bt_positive);
         snackView.findViewById(R.id.tv_swipe).setVisibility(
@@ -290,7 +310,9 @@ public final class Rate {
                         && cbNever.isChecked()) {
                     saveAsked();
                 }
-                mFeedbackAction.onRequestDismissed(cbNever.isChecked());
+                if (mFeedbackAction != null) {
+                    mFeedbackAction.onRequestDismissed(cbNever.isChecked());
+                }
             }
         });
 
@@ -301,13 +323,15 @@ public final class Rate {
                 snackbar.dismiss();
                 openPlayStore();
                 saveAsked();
-                mFeedbackAction.onRateTapped();
+                if (mFeedbackAction != null) {
+                    mFeedbackAction.onRateTapped();
+                }
             }
         });
 
         // Feedback listener
         if (mFeedbackAction != null) {
-            btFeedback.setText(mTextNegative);
+            btFeedback.setText(mTextFeedback);
             btFeedback.setVisibility(View.VISIBLE);
             btFeedback.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -316,7 +340,9 @@ public final class Rate {
                         saveAsked();
                     }
                     snackbar.dismiss();
-                    mFeedbackAction.onFeedbackTapped();
+                    if (mFeedbackAction != null) {
+                        mFeedbackAction.onFeedbackTapped();
+                    }
                 }
             });
         }
@@ -350,6 +376,7 @@ public final class Rate {
         checkBox.setText(mTextNever);
         checkBox.setChecked(DEFAULT_CHECKED);
         final Button btFeedback = layout.findViewById(R.id.bt_negative);
+        btFeedback.setText(mTextFeedback);
         btFeedback.setPaintFlags(btFeedback.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
         // Build dialog with positive and cancel buttons
@@ -364,7 +391,9 @@ public final class Rate {
                         openPlayStore();
                         saveAsked();
                         anInterface.dismiss();
-                        mFeedbackAction.onRateTapped();
+                        if (mFeedbackAction != null) {
+                            mFeedbackAction.onRateTapped();
+                        }
                     }
                 })
                 // Cancel -> close dialog, ask again later
@@ -375,7 +404,9 @@ public final class Rate {
                             saveAsked();
                         }
                         dialog.dismiss();
-                        mFeedbackAction.onRequestDismissed(checkBox.isChecked());
+                        if (mFeedbackAction != null) {
+                            mFeedbackAction.onRequestDismissed(checkBox.isChecked());
+                        }
                     }
                 });
 
@@ -389,7 +420,9 @@ public final class Rate {
                             if (checkBox.isChecked()) {
                                 saveAsked();
                             }
-                            mFeedbackAction.onRequestDismissed(checkBox.isChecked());
+                            if (mFeedbackAction != null) {
+                                mFeedbackAction.onRequestDismissed(checkBox.isChecked());
+                            }
                         }
                     });
         }
@@ -408,7 +441,9 @@ public final class Rate {
                         saveAsked();
                     }
                     dialog.dismiss();
-                    mFeedbackAction.onFeedbackTapped();
+                    if (mFeedbackAction != null) {
+                        mFeedbackAction.onFeedbackTapped();
+                    }
                 }
             });
         }
@@ -453,6 +488,11 @@ public final class Rate {
         mPrefs.edit().putBoolean(KEY_BOOL_ASKED, true).apply();
     }
 
+    @IntDef({THEME_LIGHT, THEME_DARK})
+    @interface Theme {
+
+    }
+
     @SuppressWarnings({"unused", "WeakerAccess", "SameParameterValue"})
     public static class Builder {
 
@@ -490,6 +530,12 @@ public final class Rate {
             return this;
         }
 
+        @NonNull
+        public Builder setLightTheme(boolean lightTheme) {
+            mRate.mTheme = lightTheme ? THEME_LIGHT : THEME_DARK;
+            return this;
+        }
+
         /**
          * Sets the message to show in the rating request.
          *
@@ -506,7 +552,8 @@ public final class Rate {
         /**
          * Sets the repeat count to bother the user again if "don't ask again" was checked.
          *
-         * @param repeatCount Integer how often rate will wait if "don't ask again" was checked (default 30).
+         * @param repeatCount Integer how often rate will wait if "don't ask again" was checked
+         *                    (default 30).
          * @return The current {@link Builder}
          */
         @NonNull
@@ -630,6 +677,29 @@ public final class Rate {
         }
 
         /**
+         * Sets the text to show in the feedback link.
+         *
+         * @param message The text in the link
+         * @return The current {@link Builder}
+         */
+        @NonNull
+        public Builder setFeedbackText(@Nullable CharSequence message) {
+            mRate.mTextFeedback = message;
+            return this;
+        }
+
+        /**
+         * Sets the text to show in the feedback link.
+         *
+         * @param resId The text in the link
+         * @return The current {@link Builder}
+         */
+        @NonNull
+        public Builder setFeedbackText(@StringRes int resId) {
+            return setFeedbackText(mRate.mContext.getString(resId));
+        }
+
+        /**
          * Sets the Uri to open when the user clicks the feedback button.
          * This can use the scheme `mailto:`, `tel:`, `geo:`, `https:`, etc.
          *
@@ -690,8 +760,10 @@ public final class Rate {
          * Sets the destination rate link if not Google Play.
          *
          * @param rateDestinationStore The destination link
-         *                             (i.e. "amzn://apps/android?p=com.pixplicity.generate" ). Keeps default Google Play store
-         *                             as destination if rateDestinationStore is {@code null} or empty.
+         *                             (i.e. "amzn://apps/android?p=com.pixplicity.generate" ).
+         *                             Keeps default Google Play store
+         *                             as destination if rateDestinationStore is {@code null} or
+         *                             empty.
          * @return The current {@link Builder}
          */
         public Builder setRateDestinationStore(String rateDestinationStore) {

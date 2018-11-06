@@ -20,6 +20,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -31,7 +32,7 @@ import com.pixplicity.generate.Rate;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Rate mRateDialog, mRateBar;
+    private Rate mRateDialog, mRateBarDark, mRateBarLight;
     private Toast mToast;
 
     @Override
@@ -43,21 +44,53 @@ public class MainActivity extends AppCompatActivity {
         Button btAction = findViewById(R.id.bt_action);
         Button btFake = findViewById(R.id.bt_fake);
         Button btTestDialog = findViewById(R.id.bt_test_dialog);
-        Button btTestBar = findViewById(R.id.bt_test_bar);
+        Button btTestBarDark = findViewById(R.id.bt_test_bar_dark);
+        Button btTestBarLight = findViewById(R.id.bt_test_bar_light);
         btAction.setOnClickListener(view -> onActionPerformed());
         btFake.setOnClickListener(view -> onAppLaunched());
         btTestDialog.setOnClickListener(view -> onTestDialogClicked());
-        btTestBar.setOnClickListener(view -> onTestBarClicked());
+        btTestBarDark.setOnClickListener(view -> onTestBarDarkClicked());
+        btTestBarLight.setOnClickListener(view -> onTestBarLightClicked());
 
-        mRateDialog = new Rate.Builder(this)
+        mRateDialog = createDialog();
+
+        mRateBarDark = createSnackBar(root, false);
+
+        mRateBarLight = createSnackBar(root, true);
+
+        TextView tvMadeBy = findViewById(R.id.tv_made_by);
+        tvMadeBy.setOnClickListener(view -> {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(getString(R.string.pix_link)));
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        });
+
+        TextView tvGitHub = findViewById(R.id.tv_github);
+        tvGitHub.setOnClickListener(view -> {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(getString(R.string.github_link)));
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        });
+    }
+
+    @NonNull
+    private Rate createDialog() {
+        return new Rate.Builder(this)
                 .setTriggerCount(3)
                 .setMinimumInstallTime(0)
                 .setFeedbackAction(Uri.parse("geo:51.7552289,-87.6350339,674"))
                 .build();
+    }
 
-        mRateBar = new Rate.Builder(this)
+    @NonNull
+    private Rate createSnackBar(ViewGroup root, boolean lightTheme) {
+        return new Rate.Builder(this)
                 .setMessage(R.string.please_rate_short)
                 .setMinimumInstallTime(0)
+                .setLightTheme(lightTheme)
+                .setFeedbackText("Provide feedback...")
                 .setFeedbackAction(new OnFeedbackListener() {
                     @Override
                     public void onFeedbackTapped() {
@@ -80,22 +113,6 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .setSnackBarParent(root)
                 .build();
-
-        TextView tvMadeBy = findViewById(R.id.tv_made_by);
-        tvMadeBy.setOnClickListener(view -> {
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse(getString(R.string.pix_link)));
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-        });
-
-        TextView tvGitHub = findViewById(R.id.tv_github);
-        tvGitHub.setOnClickListener(view -> {
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse(getString(R.string.github_link)));
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-        });
     }
 
     @Override
@@ -130,7 +147,11 @@ public class MainActivity extends AppCompatActivity {
         mRateDialog.test();
     }
 
-    private void onTestBarClicked() {
-        mRateBar.test();
+    private void onTestBarDarkClicked() {
+        mRateBarDark.test();
+    }
+
+    private void onTestBarLightClicked() {
+        mRateBarLight.test();
     }
 }
