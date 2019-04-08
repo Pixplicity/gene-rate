@@ -31,11 +31,14 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
+
 import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+
 import com.google.android.material.snackbar.Snackbar;
+
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -237,6 +240,7 @@ public final class Rate {
      *
      * @return the {@link Rate} instance
      */
+    @SuppressWarnings("UnusedReturnValue")
     @NonNull
     public Rate test() {
         showRatingRequest();
@@ -371,7 +375,10 @@ public final class Rate {
         }
 
         assert inflater != null;
-        @SuppressLint("InflateParams") final ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.in_dialog, null);
+        int layoutId = mTheme == THEME_DARK
+                ? R.layout.in_dialog_dark
+                : R.layout.in_dialog_light;
+        @SuppressLint("InflateParams") final ViewGroup layout = (ViewGroup) inflater.inflate(layoutId, null);
         final CheckBox checkBox = layout.findViewById(R.id.cb_never);
         checkBox.setText(mTextNever);
         checkBox.setChecked(DEFAULT_CHECKED);
@@ -380,7 +387,19 @@ public final class Rate {
         btFeedback.setPaintFlags(btFeedback.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
         // Build dialog with positive and cancel buttons
-        final AlertDialog.Builder builder = new AlertDialog.Builder(mContext)
+        final AlertDialog.Builder builder;
+        if (mTheme == THEME_DARK) {
+            int themeResId;
+            if (VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP_MR1) {
+                themeResId = android.R.style.Theme_DeviceDefault_Dialog_Alert;
+            } else {
+                themeResId = AlertDialog.THEME_DEVICE_DEFAULT_DARK;
+            }
+            builder = new AlertDialog.Builder(mContext, themeResId);
+        } else {
+            builder = new AlertDialog.Builder(mContext);
+        }
+        builder
                 .setMessage(mMessage)
                 .setView(layout)
                 .setCancelable(false)
