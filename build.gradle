@@ -22,7 +22,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.0-alpha02'
+        classpath 'com.android.tools.build:gradle:3.3.2'
         // Code checks
         classpath 'com.noveogroup.android:check:1.2.5'
         // used to generate a POM file
