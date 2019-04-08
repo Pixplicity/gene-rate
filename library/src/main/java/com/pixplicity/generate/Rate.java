@@ -31,11 +31,11 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
-import android.support.annotation.IntDef;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
-import android.support.design.widget.Snackbar;
+import androidx.annotation.IntDef;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import com.google.android.material.snackbar.Snackbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -272,7 +272,7 @@ public final class Rate {
         Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) snackbar.getView();
 
         // Hide default text
-        TextView textView = layout.findViewById(android.support.design.R.id.snackbar_text);
+        TextView textView = layout.findViewById(R.id.snackbar_text);
         textView.setVisibility(View.INVISIBLE);
 
         // Inflate our custom view

@@ -56,5 +56,5 @@ ext.versions = [
         // Libs & tools
         minSdk     : 14,
         targetSdk  : 28,
-        supportLib : '28.0.0'
+        supportLib : '1.0.0-beta01'
 ]
