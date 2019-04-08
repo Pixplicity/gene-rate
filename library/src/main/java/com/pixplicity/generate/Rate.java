@@ -31,14 +31,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
-
-import androidx.annotation.IntDef;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-
-import com.google.android.material.snackbar.Snackbar;
-
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,7 +41,14 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import java.util.concurrent.TimeUnit;
+
+import androidx.annotation.IntDef;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 
 /**
  * When your app has launched a couple of times, this class will ask to give your app a rating on
@@ -165,7 +164,7 @@ public final class Rate {
      */
     private long getCount() {
         long count = mPrefs.getLong(KEY_LONG_LAUNCH_COUNT, 0L);
-        // For apps ugrading from the 1.1.6 version:
+        // For apps upgrading from the 1.1.6 version:
         if (count == 0) {
             count = mPrefs.getInt(KEY_INT_LAUNCH_COUNT, 0);
         }
