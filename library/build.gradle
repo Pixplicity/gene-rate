@@ -24,7 +24,6 @@ repositories {
 android {
 
     compileSdkVersion versions.targetSdk
-    buildToolsVersion versions.buildTools
 
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES.txt'

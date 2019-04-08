@@ -19,7 +19,6 @@ apply plugin: 'com.android.application'
 android {
 
     compileSdkVersion versions.targetSdk
-    buildToolsVersion versions.buildTools
 
     defaultConfig {
         applicationId "com.pixplicity.generate.sample"
