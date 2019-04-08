@@ -24,20 +24,65 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical"
-        android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
         tools:context="com.pixplicity.generate.sample.MainActivity">
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="48dp"
+            android:layout_marginRight="48dp"
             android:layout_marginBottom="10dp"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
             android:gravity="center"
-            android:text="When this app has been launched a few times, and after you perform an action that indicates engagement, I will ask for feedback or a rating." />
+            android:text="After you perform an action that indicates engagement, you will be asked for feedback or a rating."
+            android:textSize="18sp" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="48dp"
+            android:layout_marginRight="48dp"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/rb_dialog_dark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="Dialog (dark theme)" />
+
+            <RadioButton
+                android:id="@+id/rb_dialog_light"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Dialog (light theme)" />
+
+            <RadioButton
+                android:id="@+id/rb_snackbar_dark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Snackbar (dark theme)" />
+
+            <RadioButton
+                android:id="@+id/rb_snackbar_light"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Snackbar (light theme)" />
+
+        </RadioGroup>
 
         <Button
             android:id="@+id/bt_fake"
@@ -51,43 +96,16 @@
             android:layout_height="wrap_content"
             android:text="Indicate app engagement" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:text="Force showing the rating request:" />
-
-        <LinearLayout
+        <Button
+            android:id="@+id/bt_test"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:text="Force display" />
 
-            <Button
-                android:id="@+id/bt_test_dialog"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Dialog" />
-
-            <Button
-                android:id="@+id/bt_test_bar_dark"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="SnackBar Dark" />
-
-            <Button
-                android:id="@+id/bt_test_bar_light"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="SnackBar Light" />
-        </LinearLayout>
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="2" />
 
         <TextView
             android:id="@+id/tv_made_by"
@@ -109,8 +127,10 @@
             android:autoLink="all"
             android:background="?android:selectableItemBackground"
             android:clickable="true"
+            android:focusable="true"
             android:padding="8dp"
-            android:text="@string/github"
-            android:focusable="true"/>
+            android:text="@string/github" />
+
     </LinearLayout>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

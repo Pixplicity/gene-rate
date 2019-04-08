@@ -20,42 +20,44 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pixplicity.generate.OnFeedbackListener;
 import com.pixplicity.generate.Rate;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 public class MainActivity extends AppCompatActivity {
 
-    private Rate mRateDialog, mRateBarDark, mRateBarLight;
-    private Toast mToast;
+    private Rate mRateDialogDark, mRateDialogLight, mRateBarDark, mRateBarLight;
+    private RadioButton mRbDialogDark, mRbDialogLight, mRbSnackbarDark, mRbSnackbarLight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mRbDialogDark = findViewById(R.id.rb_dialog_dark);
+        mRbDialogLight = findViewById(R.id.rb_dialog_light);
+        mRbSnackbarDark = findViewById(R.id.rb_snackbar_dark);
+        mRbSnackbarLight = findViewById(R.id.rb_snackbar_light);
+
         ViewGroup root = findViewById(R.id.activity_main);
         Button btAction = findViewById(R.id.bt_action);
         Button btFake = findViewById(R.id.bt_fake);
-        Button btTestDialog = findViewById(R.id.bt_test_dialog);
-        Button btTestBarDark = findViewById(R.id.bt_test_bar_dark);
-        Button btTestBarLight = findViewById(R.id.bt_test_bar_light);
-        btAction.setOnClickListener(view -> onActionPerformed());
-        btFake.setOnClickListener(view -> onAppLaunched());
-        btTestDialog.setOnClickListener(view -> onTestDialogClicked());
-        btTestBarDark.setOnClickListener(view -> onTestBarDarkClicked());
-        btTestBarLight.setOnClickListener(view -> onTestBarLightClicked());
+        Button btTest = findViewById(R.id.bt_test);
+        btAction.setOnClickListener(view -> onActionPerformed(getCurrentRate()));
+        btFake.setOnClickListener(view -> onAppLaunched(getCurrentRate()));
+        btTest.setOnClickListener(view -> onTestDialogClicked(getCurrentRate()));
 
-        mRateDialog = createDialog();
-
+        mRateDialogDark = createDialog(false);
+        mRateDialogLight = createDialog(true);
         mRateBarDark = createSnackBar(root, false);
-
         mRateBarLight = createSnackBar(root, true);
 
         TextView tvMadeBy = findViewById(R.id.tv_made_by);
@@ -76,10 +78,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @NonNull
-    private Rate createDialog() {
+    private Rate createDialog(boolean lightTheme) {
         return new Rate.Builder(this)
                 .setTriggerCount(3)
                 .setMinimumInstallTime(0)
+                .setLightTheme(lightTheme)
                 .setFeedbackAction(Uri.parse("geo:51.7552289,-87.6350339,674"))
                 .build();
     }
@@ -88,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
     private Rate createSnackBar(ViewGroup root, boolean lightTheme) {
         return new Rate.Builder(this)
                 .setMessage(R.string.please_rate_short)
+                .setTriggerCount(3)
                 .setMinimumInstallTime(0)
                 .setLightTheme(lightTheme)
                 .setFeedbackText("Provide feedback...")
@@ -115,43 +119,40 @@ public class MainActivity extends AppCompatActivity {
                 .build();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        onAppLaunched();
-    }
-
-    private void onActionPerformed() {
-        if (!mRateDialog.showRequest()) {
-            showRemainingCount();
+    private void onActionPerformed(Rate rate) {
+        if (!rate.showRequest()) {
+            showRemainingCount(rate);
         }
     }
 
-    private void onAppLaunched() {
-        mRateDialog.count();
-        showRemainingCount();
+    private void onAppLaunched(Rate rate) {
+        rate.count();
+        showRemainingCount(rate);
+    }
+
+    private Rate getCurrentRate() {
+        if (mRbDialogDark.isChecked()) {
+            return mRateDialogDark;
+        } else if (mRbDialogLight.isChecked()) {
+            return mRateDialogLight;
+        } else if (mRbSnackbarDark.isChecked()) {
+            return mRateBarDark;
+        } else if (mRbSnackbarLight.isChecked()) {
+            return mRateBarLight;
+        } else {
+            throw new IllegalStateException("No checkboxes checked");
+        }
     }
 
     @SuppressLint("ShowToast")
-    private synchronized void showRemainingCount() {
-        int count = (int) mRateDialog.getRemainingCount();
+    private synchronized void showRemainingCount(Rate rate) {
+        int count = (int) rate.getRemainingCount();
         String message = getResources().getQuantityString(R.plurals.toast_x_more_times, count, count);
-        if (mToast == null) {
-            mToast = Toast.makeText(this, message, Toast.LENGTH_SHORT);
-        }
-        mToast.setText(message);
-        mToast.show();
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
-    private void onTestDialogClicked() {
-        mRateDialog.test();
+    private void onTestDialogClicked(Rate rate) {
+        rate.test();
     }
 
-    private void onTestBarDarkClicked() {
-        mRateBarDark.test();
-    }
-
-    private void onTestBarLightClicked() {
-        mRateBarLight.test();
-    }
 }
