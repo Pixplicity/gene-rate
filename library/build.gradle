@@ -76,7 +76,7 @@ dependencies {
     })
     implementation "androidx.appcompat:appcompat:$versions.supportLib"
     testImplementation 'junit:junit:4.12'
-    implementation "com.google.android.material:material:$versions.supportLib"
+    implementation "com.google.android.material:material:$versions.materialLib"
 }
 
 apply from: file('../code_checks.gradle')
