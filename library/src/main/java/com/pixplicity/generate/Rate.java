@@ -18,7 +18,6 @@ package com.pixplicity.generate;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -49,6 +48,7 @@ import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+import androidx.appcompat.app.AlertDialog;
 
 /**
  * When your app has launched a couple of times, this class will ask to give your app a rating on
@@ -386,19 +386,13 @@ public final class Rate {
         btFeedback.setPaintFlags(btFeedback.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
         // Build dialog with positive and cancel buttons
-        final AlertDialog.Builder builder;
+        int themeResId;
         if (mTheme == THEME_DARK) {
-            int themeResId;
-            if (VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP_MR1) {
-                themeResId = android.R.style.Theme_DeviceDefault_Dialog_Alert;
-            } else {
-                themeResId = AlertDialog.THEME_DEVICE_DEFAULT_DARK;
-            }
-            builder = new AlertDialog.Builder(mContext, themeResId);
+            themeResId = R.style.RateDialog_Dark;
         } else {
-            builder = new AlertDialog.Builder(mContext);
+            themeResId = R.style.RateDialog_Light;
         }
-        builder
+        final AlertDialog.Builder builder = new AlertDialog.Builder(mContext, themeResId)
                 .setMessage(mMessage)
                 .setView(layout)
                 .setCancelable(false)
