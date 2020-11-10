@@ -1,10 +1,28 @@
 # Changes
 
-### 1.1.9 (Feb 2018)
+## 1.4.0 (Nov 2020)
+
+- Use the new rating dialog that is natively supported by Google Play services
+
+
+## 1.3.0 (Apr 2019)
+
+- Defined light and dark material themes
+- Sample app: update style using radio buttons
+- Migrated to AndroidX
+
+
+## 1.2.0 (Nov 2018)
+
+- Support for custom 'Give feedback' text
+
+
+## 1.1.9 (Feb 2018)
 
 - Added: callback listeners for rating and dismissal.
 
-### 1.1.8 (Sep 2017)
+
+## 1.1.8 (Sep 2017)
 
 - Fixed: dimissing Snackbar would not store the checkbox state.
 - Updated Gradle plugin and wrapper
@@ -14,22 +32,26 @@
 - Java 8 update 
 - Support for ridiculous number of app launches
 
-### 1.1.6 (Jul 12, 2017)
+
+## 1.1.6 (Jul 12, 2017)
 
 Skipped some versions due to publication issues.
 
 - Fixed: checkbox and text would appear as dark text on dark background when using a dark app theme.
 
-### 1.1.3 (Jun 15, 2017)
+
+## 1.1.3 (Jun 15, 2017)
 
 - SDK 26
 - Added `reset` method to clear settings during testing.
 
-### 1.1.2 (Mar 15, 2017)
+
+## 1.1.2 (Mar 15, 2017)
 
 - Message in SnackBar could appear as black text on dark background.
 
-### 1.1.0 (Jan 17, 2017)
+
+## 1.1.0 (Jan 17, 2017)
 
 - `launched()` and `check()` deprecated and replaced by `count()` and `showRequest()`.
 - Larger **SnackBar** with functionality like the dialog.
@@ -37,6 +59,7 @@ Skipped some versions due to publication issues.
 - Replaced `DialogInterface.OnClickListener` with `onFeedbackListener` as type for feedback callbacks.
 - Underlined feedback buttons to give the impression of a link.
 
-### 1.0 Initial release (Jan 7, 2017)
+
+## 1.0 Initial release (Jan 7, 2017)
 
 First release, includes dialog and (simple) SnackBar.
