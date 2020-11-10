@@ -50,11 +50,11 @@ task clean(type: Delete) {
 }
 
 ext.versions = [
-        versionCode : 12,
-        versionName : '1.3.0',
+        versionCode : 13,
+        versionName : '1.4.0',
         // Libs & tools
         minSdk      : 14,
         targetSdk   : 28,
-        supportLib  : '1.0.2',
+        supportLib  : '1.2.0',
         materialLib : '1.0.0'
 ]

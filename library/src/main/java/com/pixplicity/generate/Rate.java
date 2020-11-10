@@ -31,6 +31,7 @@ import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +42,11 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.play.core.review.ReviewInfo;
+import com.google.android.play.core.review.ReviewManager;
+import com.google.android.play.core.review.ReviewManagerFactory;
+import com.google.android.play.core.tasks.OnCompleteListener;
+import com.google.android.play.core.tasks.Task;
 
 import java.util.concurrent.TimeUnit;
 
@@ -324,11 +330,8 @@ public final class Rate {
             @Override
             public void onClick(View v) {
                 snackbar.dismiss();
-                openPlayStore();
+                openNativeRating();
                 saveAsked();
-                if (mFeedbackAction != null) {
-                    mFeedbackAction.onRateTapped();
-                }
             }
         });
 
@@ -400,12 +403,9 @@ public final class Rate {
                 .setPositiveButton(mTextPositive, new OnClickListener() {
                     @Override
                     public void onClick(DialogInterface anInterface, int i) {
-                        openPlayStore();
+                        openNativeRating();
                         saveAsked();
                         anInterface.dismiss();
-                        if (mFeedbackAction != null) {
-                            mFeedbackAction.onRateTapped();
-                        }
                     }
                 })
                 // Cancel -> close dialog, ask again later
@@ -470,6 +470,43 @@ public final class Rate {
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
         mContext.startActivity(intent);
+
+        if (mFeedbackAction != null) {
+            mFeedbackAction.onRateTapped();
+        }
+    }
+
+    private void openNativeRating() {
+        if (mContext instanceof Activity) {
+            final ReviewManager manager = ReviewManagerFactory.create(mContext);
+            final Task<ReviewInfo> request = manager.requestReviewFlow();
+            request.addOnCompleteListener(new OnCompleteListener<ReviewInfo>() {
+                @Override
+                public void onComplete(@NonNull Task<ReviewInfo> task) {
+                    if (task.isSuccessful()) {
+                        ReviewInfo reviewInfo = task.getResult();
+                        Task<Void> flow = manager.launchReviewFlow((Activity) mContext, reviewInfo);
+                        flow.addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                // The flow has finished. The API does not indicate whether the user
+                                // reviewed or not, or even whether the review dialog was shown. Thus, no
+                                // matter the result, we continue our app flow.
+                                if (mFeedbackAction != null) {
+                                    mFeedbackAction.onRateTapped();
+                                }
+                            }
+                        });
+                    } else {
+                        // There was some problem, continue regardless of the result.
+                        Log.w("Rate", "Unable to open rating popup");
+                        openPlayStore();
+                    }
+                }
+            });
+        } else {
+            openPlayStore();
+        }
     }
 
     /**
