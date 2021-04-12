@@ -66,6 +66,14 @@ android {
         xmlOutput file("${project.buildDir}/reports/lint/lint-report.xml")
         htmlOutput file("${project.buildDir}/reports/lint/lint-report.html")
     }
+
+    sourceSets {
+        getByName("main").java.srcDirs("src/main/java")
+        getByName("main").res.srcDirs(
+                "src/main/res/layouts",
+                "src/main/res"
+        )
+    }
 }
 
 dependencies {
@@ -79,5 +87,6 @@ dependencies {
     implementation "com.google.android.material:material:$versions.materialLib"
 }
 
+apply from: "${rootProject.projectDir}/mavencentral_publish.gradle"
+
 apply from: file('../code_checks.gradle')
-apply from: file('../bintray_upload.gradle')
