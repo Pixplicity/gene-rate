@@ -45,3 +45,4 @@ captures/
 # Misc
 .DS_Store
 .externalNativeBuild
+.signing/
