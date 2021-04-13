@@ -1,4 +1,3 @@
- [![Download](https://api.bintray.com/packages/pixplicity/android/gene-rate/images/download.svg)](https://bintray.com/pixplicity/android/gene-rate/_latestVersion)
 
 # Gene-rate
 
@@ -35,7 +34,7 @@ Which is why this library...
 Gradle: 
 
 ```groovy
-compile 'com.pixplicity.generate:library:1.+'
+implementation 'com.pixplicity.generate:gene-rate:1.3.+'
 ```
 
 Java:
